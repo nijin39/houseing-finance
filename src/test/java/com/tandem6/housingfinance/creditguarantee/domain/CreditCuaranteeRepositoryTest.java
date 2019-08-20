@@ -1,5 +1,8 @@
 package com.tandem6.housingfinance.creditguarantee.domain;
 
+import com.tandem6.housingfinance.creditguarantee.command.domain.CreditGuarantee;
+import com.tandem6.housingfinance.creditguarantee.command.domain.CreditGuaranteeId;
+import com.tandem6.housingfinance.creditguarantee.command.domain.CreditGuaranteeRepository;
 import com.tandem6.housingfinance.institute.domain.Institute;
 import com.tandem6.housingfinance.institute.domain.InstituteRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +19,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class CreditCuaranteeRepositoryTest {
 
-    @Autowired CreditCuaranteeRepository creditCuaranteeRepository;
+    @Autowired
+    CreditGuaranteeRepository creditGuaranteeRepository;
     @Autowired InstituteRepository instituteRepository;
     private Institute institute;
 
@@ -28,7 +32,7 @@ public class CreditCuaranteeRepositoryTest {
     @Test
     public void T01_CreditGuarantee_생성하기(){
         CreditGuaranteeId creditGuaranteeId = new CreditGuaranteeId(institute.getInstituteCode(), "2019", "01");
-        CreditGuarantee creditGuarantee = creditCuaranteeRepository.save(new CreditGuarantee(creditGuaranteeId, 2000l));
+        CreditGuarantee creditGuarantee = creditGuaranteeRepository.save(new CreditGuarantee(creditGuaranteeId, 2000l));
 
         log.info("Credit Guarantee ::: {}", creditGuarantee.toString());
     }
@@ -36,13 +40,13 @@ public class CreditCuaranteeRepositoryTest {
     @Test
     public void T02_CreditGuarantee_전체조회(){
         CreditGuaranteeId creditGuaranteeId = new CreditGuaranteeId(institute.getInstituteCode(), "2019", "01");
-        CreditGuarantee creditGuarantee = creditCuaranteeRepository.save(new CreditGuarantee(creditGuaranteeId, 2000l));
+        CreditGuarantee creditGuarantee = creditGuaranteeRepository.save(new CreditGuarantee(creditGuaranteeId, 2000l));
 
         CreditGuaranteeId creditGuaranteeId2 = new CreditGuaranteeId(institute.getInstituteCode(), "2019", "02");
-        CreditGuarantee creditGuarantee2 = creditCuaranteeRepository.save(new CreditGuarantee(creditGuaranteeId2, 4000l));
+        CreditGuarantee creditGuarantee2 = creditGuaranteeRepository.save(new CreditGuarantee(creditGuaranteeId2, 4000l));
 
 
-        Assertions.assertThat( creditCuaranteeRepository.findAll() ).hasSize(2);
+        Assertions.assertThat( creditGuaranteeRepository.findAll() ).hasSize(2);
     }
 }
 

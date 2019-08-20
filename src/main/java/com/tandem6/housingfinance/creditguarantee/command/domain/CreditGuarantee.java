@@ -1,4 +1,4 @@
-package com.tandem6.housingfinance.creditguarantee.domain;
+package com.tandem6.housingfinance.creditguarantee.command.domain;
 
 import com.tandem6.housingfinance.common.domain.TimeEntity;
 import lombok.AllArgsConstructor;

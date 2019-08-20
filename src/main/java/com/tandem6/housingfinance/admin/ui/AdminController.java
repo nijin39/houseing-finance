@@ -1,5 +1,6 @@
 package com.tandem6.housingfinance.admin.ui;
 
+import com.tandem6.housingfinance.creditguarantee.command.application.CreditGuaranteeService;
 import com.tandem6.housingfinance.institute.application.InstituteService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
@@ -24,9 +25,11 @@ import java.util.stream.StreamSupport;
 public class AdminController {
 
     final private InstituteService instituteService;
+    final private CreditGuaranteeService creditGuaranteeService;
 
-    public AdminController(InstituteService instituteService) {
+    public AdminController(InstituteService instituteService, CreditGuaranteeService creditGuaranteeService) {
         this.instituteService = instituteService;
+        this.creditGuaranteeService = creditGuaranteeService;
     }
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -47,6 +50,7 @@ public class AdminController {
 
         Stream<Map<String, String>> csvData = StreamSupport.stream(records.spliterator(), false)
                 .map(record -> record.toMap());
+        creditGuaranteeService.importCsv(csvData);
 
 
 
