@@ -1,13 +1,11 @@
 package com.tandem6.housingfinance.common.config;
 
-import com.mashape.unirest.http.exceptions.UnirestException;
-import com.tandem6.housingfinance.institute.application.InstituteApplication;
+import com.tandem6.housingfinance.institute.domain.Institute;
+import com.tandem6.housingfinance.institute.domain.InstituteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
 
 @Component
 class ApplicationStartup implements ApplicationListener<ApplicationReadyEvent> {
@@ -18,17 +16,19 @@ class ApplicationStartup implements ApplicationListener<ApplicationReadyEvent> {
      */
 
     @Autowired
-    private InstituteApplication bookApplication;
+    private InstituteRepository instituteRepository;
 
     @Override
     public void onApplicationEvent(final ApplicationReadyEvent event) {
-//        try {
-//            //seedData();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (UnirestException e) {
-//            e.printStackTrace();
-//        }
+        //seedData();
     }
+
+    private void seedData() {
+        Institute institute1 = new Institute("기업은행");
+        Institute institute2 = new Institute("국민은행");
+        instituteRepository.save(institute1);
+        instituteRepository.save(institute2);
+    }
+
 
 }
