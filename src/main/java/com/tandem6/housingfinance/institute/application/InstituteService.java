@@ -3,11 +3,13 @@ package com.tandem6.housingfinance.institute.application;
 import com.tandem6.housingfinance.institute.domain.Institute;
 import com.tandem6.housingfinance.institute.domain.InstituteException;
 import com.tandem6.housingfinance.institute.domain.InstituteRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional
 public class InstituteService {
@@ -29,5 +31,16 @@ public class InstituteService {
         } else {
             throw new InstituteException("이미 등록된 기관이 있습니다.", 1L);
         }
+    }
+
+    public void AddInstituteList(List<String> instituteNameList){
+        instituteNameList.stream()
+                .forEach(instituteName -> {
+                    try {
+                        this.AddInstitute(instituteName);
+                    } catch (InstituteException e) {
+                        log.info("이미 등록 하였으므로 다시 등록하지 않습니다.");
+                    }
+                });
     }
 }
