@@ -1,0 +1,1 @@
+select max(year), min(year) from credit_guarantee

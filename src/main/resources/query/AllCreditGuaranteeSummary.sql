@@ -4,4 +4,3 @@ from (
     from credit_guarantee
     group by institute_code, year) a, institute i
 where a.institute_code = i.institute_code
-and a.year = ?

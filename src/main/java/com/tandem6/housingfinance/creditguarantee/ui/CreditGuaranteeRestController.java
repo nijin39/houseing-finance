@@ -4,7 +4,11 @@ import com.tandem6.housingfinance.creditguarantee.command.application.CreditGuar
 import com.tandem6.housingfinance.creditguarantee.command.domain.CreditGuarantee;
 import com.tandem6.housingfinance.creditguarantee.query.application.AmountReportService;
 import com.tandem6.housingfinance.creditguarantee.query.dto.AmountAnnualReport;
+import com.tandem6.housingfinance.creditguarantee.query.dto.MaxAmountInstitute;
+import com.tandem6.housingfinance.creditguarantee.query.dto.MaxAndMinAverageByInstituteDto;
+import com.tandem6.housingfinance.creditguarantee.query.dto.MaxAndMinYearDto;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,9 +31,23 @@ public class CreditGuaranteeRestController {
         return creditGuaranteeService.findAllCreditGuarantees();
     }
 
+    @GetMapping("/creditGuarantee/years")
+    public List<MaxAndMinYearDto> findAllCreditGuaranteeYears(){
+        return amountReportService.getMaxAndMinYear();
+    }
+
+    @GetMapping("/creditGuarantee/institute/max-amount")
+    public MaxAmountInstitute getMaxAmountInstitute(){
+        return amountReportService.getMaxAmountInstitute();
+    }
+
+    @GetMapping("/creditGuarantee/institute/{instituteName}/max-min-average")
+    public MaxAndMinAverageByInstituteDto getMaxAndMinAverage(@PathVariable String instituteName){
+        return amountReportService.getMaxAndMinAverage(instituteName);
+    }
+
     @GetMapping("/creditGuarantee/annualReport")
-    public List<AmountAnnualReport> getAnnualReport(){
-        amountReportService.generateAmountAnnualReport();
-        return null;
+    public AmountAnnualReport getAnnualReport(){
+        return amountReportService.generateAmountAnnualReport();
     }
 }
