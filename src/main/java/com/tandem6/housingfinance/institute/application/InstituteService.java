@@ -4,6 +4,7 @@ import com.tandem6.housingfinance.institute.domain.Institute;
 import com.tandem6.housingfinance.institute.domain.InstituteException;
 import com.tandem6.housingfinance.institute.domain.InstituteRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -15,9 +16,11 @@ import java.util.List;
 public class InstituteService {
 
     final private InstituteRepository instituteRepository;
+    final private CacheManager cacheManager;
 
-    public InstituteService(InstituteRepository instituteRepository) {
+    public InstituteService(InstituteRepository instituteRepository, CacheManager cacheManager) {
         this.instituteRepository = instituteRepository;
+        this.cacheManager = cacheManager;
     }
 
     public List<Institute> findAllInstitute(){
@@ -31,6 +34,8 @@ public class InstituteService {
         } else {
             throw new InstituteException("이미 등록된 기관이 있습니다.", 1L);
         }
+
+        cacheManager.getCache("institute").clear();
     }
 
     public void AddInstituteList(List<String> instituteNameList){

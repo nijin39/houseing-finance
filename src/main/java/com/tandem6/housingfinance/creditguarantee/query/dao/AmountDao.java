@@ -31,14 +31,8 @@ public class AmountDao {
     public MaxAndMinAverageByInstituteDto getMaxAndMinAverage(String instituteName){
         JpaQueryExecutor queryExecutor = new JpaQueryExecutor();
         List<CreditGuaranteeSummary> creditGuaranteeSummaryList = queryExecutor.executeSelect(entityManager, CreditGuaranteeSummary.class, "query/AllCreditGuaranteeSummary.sql");
-        CreditGuaranteeSummary maxCreditGuaranteeSummary = creditGuaranteeSummaryList.stream()
-                .filter(creditGuaranteeSummaryItem -> creditGuaranteeSummaryItem.getInstituteName().equals(instituteName))
-                .max(Comparator.comparing(CreditGuaranteeSummary::getTotal))
-                .orElseThrow(NoSuchElementException::new);
-        CreditGuaranteeSummary minCreditGuaranteeSummary = creditGuaranteeSummaryList.stream()
-                .filter(creditGuaranteeSummaryItem -> creditGuaranteeSummaryItem.getInstituteName().equals(instituteName))
-                .min(Comparator.comparing(CreditGuaranteeSummary::getTotal))
-                .orElseThrow(NoSuchElementException::new);
+        CreditGuaranteeSummary maxCreditGuaranteeSummary = maxCreditGuaranteeSummary(instituteName, creditGuaranteeSummaryList);
+        CreditGuaranteeSummary minCreditGuaranteeSummary = getCreditGuaranteeMinAmount(instituteName, creditGuaranteeSummaryList);
         MaxAndMinAverageByInstituteDto maxAndMinAverageByInstituteDto = new MaxAndMinAverageByInstituteDto(instituteName);
         maxAndMinAverageByInstituteDto.addSupportAmount(
                 new AmountByYear(Integer.valueOf(maxCreditGuaranteeSummary.getYear()), maxCreditGuaranteeSummary.getTotal()/12)
@@ -47,6 +41,20 @@ public class AmountDao {
                 new AmountByYear(Integer.valueOf(minCreditGuaranteeSummary.getYear()), minCreditGuaranteeSummary.getTotal()/12)
         );
         return maxAndMinAverageByInstituteDto;
+    }
+
+    private CreditGuaranteeSummary maxCreditGuaranteeSummary(String instituteName, List<CreditGuaranteeSummary> creditGuaranteeSummaryList) {
+        return creditGuaranteeSummaryList.stream()
+                    .filter(creditGuaranteeSummaryItem -> creditGuaranteeSummaryItem.getInstituteName().equals(instituteName))
+                    .max(Comparator.comparing(CreditGuaranteeSummary::getTotal))
+                    .orElseThrow(NoSuchElementException::new);
+    }
+
+    private CreditGuaranteeSummary getCreditGuaranteeMinAmount(String instituteName, List<CreditGuaranteeSummary> creditGuaranteeSummaryList) {
+        return creditGuaranteeSummaryList.stream()
+                    .filter(creditGuaranteeSummaryItem -> creditGuaranteeSummaryItem.getInstituteName().equals(instituteName))
+                    .min(Comparator.comparing(CreditGuaranteeSummary::getTotal))
+                    .orElseThrow(NoSuchElementException::new);
     }
 
 
