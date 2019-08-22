@@ -35,7 +35,8 @@ public class InstituteService {
             throw new InstituteException("이미 등록된 기관이 있습니다.", 1L);
         }
 
-        cacheManager.getCache("institute").clear();
+        cacheManager.getCache("instituteByName").clear();
+        cacheManager.getCache("instituteByCode").clear();
     }
 
     public void AddInstituteList(List<String> instituteNameList){
@@ -47,5 +48,6 @@ public class InstituteService {
                         log.info("이미 등록 하였으므로 다시 등록하지 않습니다.");
                     }
                 });
+        log.info(":::::: 기관 등록 완료");
     }
 }

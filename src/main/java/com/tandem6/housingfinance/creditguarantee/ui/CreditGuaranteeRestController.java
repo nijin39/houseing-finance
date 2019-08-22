@@ -46,6 +46,16 @@ public class CreditGuaranteeRestController {
         return amountReportService.getMaxAndMinAverage(instituteName);
     }
 
+    @GetMapping("/creditGuarantee/{instituteName}/{month}/predicate")
+    public Integer getPredicate(@PathVariable String instituteName, @PathVariable Integer month ){
+        try {
+            return creditGuaranteeService.getCreditGuaranteePredicate(instituteName, month);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
     @GetMapping("/creditGuarantee/annualReport")
     public AmountAnnualReport getAnnualReport(){
         return amountReportService.generateAmountAnnualReport();

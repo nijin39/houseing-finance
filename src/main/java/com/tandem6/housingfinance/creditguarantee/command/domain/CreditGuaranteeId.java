@@ -23,5 +23,5 @@ public class CreditGuaranteeId implements Serializable {
     private String year;
 
     @Column(name="month")
-    private String month;
+    private Integer month;
 }

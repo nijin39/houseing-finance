@@ -48,6 +48,7 @@ public class AdminController {
         List<String> csvHeader = records.getHeaderMap().keySet().stream().skip(2).collect(Collectors.toList());
         instituteService.AddInstituteList(csvHeader);
 
+        log.info("Excel Import 시작");
         Stream<Map<String, String>> csvData = StreamSupport.stream(records.spliterator(), false)
                 .map(record -> record.toMap());
         creditGuaranteeService.importCsv(csvData);

@@ -5,4 +5,5 @@ import java.util.List;
 public interface CreditGuaranteeRepository {
     CreditGuarantee save(CreditGuarantee creditGuarantee);
     List<CreditGuarantee> findAll();
+    List<CreditGuarantee> findByCreditGuaranteeIdInstituteCodeOrderByCreditGuaranteeIdYearAscCreditGuaranteeIdMonthAsc(String instituteCode);
 }
