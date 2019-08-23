@@ -1,20 +1,8 @@
-package com.tandem6.housingfinance.account.domain;
+package com.tandem6.housingfinance.account.application.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+public class AccountDTO {
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "user")
-public class DAOUser {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    @Column
     private String username;
-    @Column
-    @JsonIgnore
     private String password;
 
     public String getUsername() {
@@ -32,5 +20,4 @@ public class DAOUser {
     public void setPassword(String password) {
         this.password = password;
     }
-
 }

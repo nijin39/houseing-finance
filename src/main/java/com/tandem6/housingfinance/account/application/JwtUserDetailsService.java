@@ -1,8 +1,9 @@
 package com.tandem6.housingfinance.account.application;
 
 
-import com.tandem6.housingfinance.account.domain.DAOUser;
-import com.tandem6.housingfinance.account.domain.UserDao;
+import com.tandem6.housingfinance.account.application.dto.AccountDTO;
+import com.tandem6.housingfinance.account.domain.Account;
+import com.tandem6.housingfinance.account.domain.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,14 +18,14 @@ import java.util.ArrayList;
 public class JwtUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserDao userDao;
+    private AccountRepository accountRepository;
 
     @Autowired
     private PasswordEncoder bcryptEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        DAOUser user = userDao.findByUsername(username);
+        Account user = accountRepository.findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
@@ -32,10 +33,10 @@ public class JwtUserDetailsService implements UserDetailsService {
                 new ArrayList<>());
     }
 
-    public DAOUser save(UserDTO user) {
-        DAOUser newUser = new DAOUser();
+    public Account save(AccountDTO user) {
+        Account newUser = new Account();
         newUser.setUsername(user.getUsername());
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
-        return userDao.save(newUser);
+        return accountRepository.save(newUser);
     }
 }

@@ -1,7 +1,7 @@
 package com.tandem6.housingfinance.account.ui;
 
 import com.tandem6.housingfinance.account.application.JwtUserDetailsService;
-import com.tandem6.housingfinance.account.application.UserDTO;
+import com.tandem6.housingfinance.account.application.dto.AccountDTO;
 import com.tandem6.housingfinance.account.ui.dto.JwtRequest;
 import com.tandem6.housingfinance.account.ui.dto.JwtResponse;
 import com.tandem6.housingfinance.common.util.JwtTokenUtil;
@@ -35,7 +35,7 @@ public class JwtAuthenticationController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<?> saveUser(@RequestBody UserDTO user) throws Exception {
+    public ResponseEntity<?> saveUser(@RequestBody AccountDTO user) throws Exception {
         return ResponseEntity.ok(userDetailsService.save(user));
     }
 
