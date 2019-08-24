@@ -44,33 +44,21 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
-해당 프로젝트는 
-There are many great README templates available on GitHub, however, I didn't find one that really suit my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need.
-
-Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should element DRY principles to the rest of your life :smile:
-
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue.
-
-A list of commonly used resources that I find helpful are listed in the acknowledgements.
+ 해당 어플리케이션은 국낸 주택금융 신용보증 기관으로부터 년도별 각 금융기관(은행)에서 신용보증한 금액을 제공 받아. 현재 현황에 대한 리포팅 및 검색 기능과 과거의 데이터를 기반으로 하여 미래의 특점시점에 신용보증 금액에 대한 예측을 수행하는 것이 목표입니다.
 
 ### Built With
-This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-* [Bootstrap](https://getbootstrap.com)
-* [JQuery](https://jquery.com)
-* [Laravel](https://laravel.com)
-
+* [Spring Boot](https://getbootstrap.com)
+* [React](https://jquery.com)
+* [Spring Data Cache](https://laravel.com)
+* [JJWT]
+* [Lombok]
+* [Springfox-Swagger2]
+* [qlrm]
+* [assertj-core]
 
 
 <!-- GETTING STARTED -->
 ## Getting Started
-
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
