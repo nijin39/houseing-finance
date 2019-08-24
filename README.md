@@ -73,15 +73,19 @@ yarn install
 
 1. Clone the repo
 ```sh
-git clone https:://github.com/your_username_/Project-Name.git
+https://github.com/nijin39/houseing-finance.git
 ```
-3. Install NPM packages
+2. Start Backend 
 ```sh
-npm install
+./gradlew bootRun
 ```
-4. Enter your API in `config.js`
-```JS
-const API_KEY = 'ENTER YOUR API';
+3. Start Frontend
+```sh
+cd client; yarn start
+```
+4. Build & Packging
+```sh
+./gradlew build buildClient
 ```
 
 
@@ -89,9 +93,17 @@ const API_KEY = 'ENTER YOUR API';
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+### JWT Token
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+### API
+
+#### 1.
+
+#### 2.
+
+#### 3.
+
+#### 4.
 
 
 
