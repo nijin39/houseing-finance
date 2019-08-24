@@ -160,7 +160,7 @@ curl -X GET \
 creditguarantee(주택금융 공급)에는 통계 원본 데이터가 적재되며, 추후 연산 요청이 많은 경우를 대비하여 통계에 대한 별도 서머리 엔티디를 만들었다.
 
 CreditGuarantee Domain에 대해 주로 요청되어지는 작업이 조회성 작업이기 때문에 효율성을 고려하여 CQRS를 적용하였다.
-
+```
 .
 └── housingfinance
     ├── account(계정)
@@ -189,7 +189,7 @@ CreditGuarantee Domain에 대해 주로 요청되어지는 작업이 조회성 �
         ├── domain
         ├── infra
         └── ui
-
+```
 
 ### DDD
 
