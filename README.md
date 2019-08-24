@@ -151,6 +151,67 @@ curl -X GET \
   ```
 
 
+<!-- Archetecure -->
+## Architecture
+
+### Package
+
+패키징은 기본적으로 DDD Architecture 가이드를 따라 설계되었으며, 아래와 같이 구성된다. 금융기관은 별도로 모델링 되어지도록 제약이 주어졌다.
+creditguarantee(주택금융 공급)에는 통계 원본 데이터가 적재되며, 추후 연산 요청이 많은 경우를 대비하여 통계에 대한 별도 서머리 엔티디를 만들었다.
+
+CreditGuarantee Domain에 대해 주로 요청되어지는 작업이 조회성 작업이기 때문에 효율성을 고려하여 CQRS를 적용하였다.
+
+.
+└── housingfinance
+    ├── account(계정)
+    │   ├── application
+    │   ├── domain
+    │   └── ui
+    ├── admin(Admin Client)
+    │   └── ui
+    ├── common
+    │   ├── config
+    │   ├── domain
+    │   └── util
+    ├── creditguarantee(주택금융 공급)
+    │   ├── command
+    │   ├── infra
+    │   ├── query
+    │   └── ui
+    ├── creditguaranteesummary(주택금융 공급 통계)
+    │   ├── application
+    │   ├── domain
+    │   ├── infra
+    │   └── ui
+    ├── HousingFinanceApplication.java
+    └── institute(금융기관)
+        ├── application
+        ├── domain
+        ├── infra
+        └── ui
+
+
+### DDD
+
+institute / creditguarantee / creditguaranteesummary를 각각의 도메인으로 정리 하였고, JPA의 관계 설정에서 일어나는 문제(eager, lazy loding, 그래프 검색의 남용에 따른 도메인 로직의 응집도 저하)를 막기 위해 다른 도메인을 참조할 때는 ID 참조를 이용하였다. 또한 creditguarantee, creditguaranteesummary에서는 비즈니스의 의도가 드러나도록 Composite Key를 사용하였다.
+
+### CQRS
+
+JPA를 사용한다 하여도, 명령(Command), 조회(Query)에 대해서 효율적인 모델링을 적용할 수 있다. 아래와 같이 동일한 도메인에 대해서 Command, Query에 따라 별도의 모델링을 적용하여 유연하게 시스템을 설계하고자 하였다.  
+
+├── command
+│   ├── application
+│   └── domain
+├── infra
+│   ├── CreditGuaranteeJpaRepository.java
+│   └── CreditGuaranteePredicateApache.java
+├── query
+│   ├── application
+│   ├── dao
+│   └── dto
+└── ui
+    └── CreditGuaranteeRestController.java
+
 
 <!-- ROADMAP -->
 ## Roadmap
