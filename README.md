@@ -50,11 +50,12 @@
 * [Spring Boot](https://getbootstrap.com)
 * [React](https://jquery.com)
 * [Spring Data Cache](https://laravel.com)
-* [JJWT]
-* [Lombok]
-* [Springfox-Swagger2]
-* [qlrm]
-* [assertj-core]
+* [JJWT](https://laravel.com)
+* [Lombok](https://laravel.com)
+* [Springfox-Swagger2](https://laravel.com)
+* [qlrm](https://laravel.com)
+* [assertj-core](https://laravel.com)
+* [apache common math](https://laravel.com)
 
 
 <!-- GETTING STARTED -->
@@ -63,15 +64,14 @@
 ### Prerequisites
 
 This is an example of how to list things you need to use the software and how to install them.
-* npm
+* yarn 
 ```sh
-npm install npm@latest -g
+yarn install
 ```
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
 ```sh
 git clone https:://github.com/your_username_/Project-Name.git
 ```
