@@ -213,6 +213,22 @@ JPA를 사용한다 하여도, 명령(Command), 조회(Query)에 대해서 효�
     └── CreditGuaranteeRestController.java
 ```
 
+### Domain Event
+
+현재 어플리케이션에 조회성 기능이 많고 동시에 조회성 기능에 대한 요구가 증가했을 경우 시스템의 부하에 관한 문제를 일으킬 수 있기 때문에
+데이터의 변경이 있을 경우에 통계 도메인을 업데이트 하게 하였다. 이 두 도메인의 연동은 JPA의 도메인 이벤트를 활용하여 결합도를 낮추었다.
+```
+    @DomainEvents
+    Collection<Object> domainEvents() {
+        List<Object> result = new ArrayList<Object>();
+        result.add(new CreditGuaranteeSavedEvent(this));
+        return result;
+    }
+    
+    @EventListener
+    public void creditGuaranteeSavedEventHandler(CreditGuaranteeSavedEvent event) {
+```
+
 <!-- ROADMAP -->
 ## Roadmap
 
