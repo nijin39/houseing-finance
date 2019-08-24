@@ -230,10 +230,11 @@ JPA를 사용한다 하여도, 명령(Command), 조회(Query)에 대해서 효�
 ```
 
 <!-- ROADMAP -->
+
 ## Roadmap
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a list of proposed features (and known issues).
-
+### 예측 모델의 고도화
+### React UI 개발
 
 
 <!-- CONTRIBUTING -->
