@@ -31,7 +31,7 @@ public class CreditCuaranteeRepositoryTest {
 
     @Test
     public void T01_CreditGuarantee_생성하기(){
-        CreditGuaranteeId creditGuaranteeId = new CreditGuaranteeId(institute.getInstituteCode(), "2019", "01");
+        CreditGuaranteeId creditGuaranteeId = new CreditGuaranteeId(institute.getInstituteCode(), "2019", 1);
         CreditGuarantee creditGuarantee = creditGuaranteeRepository.save(new CreditGuarantee(creditGuaranteeId, 2000l));
 
         log.info("Credit Guarantee ::: {}", creditGuarantee.toString());
@@ -39,10 +39,10 @@ public class CreditCuaranteeRepositoryTest {
 
     @Test
     public void T02_CreditGuarantee_전체조회(){
-        CreditGuaranteeId creditGuaranteeId = new CreditGuaranteeId(institute.getInstituteCode(), "2019", "01");
+        CreditGuaranteeId creditGuaranteeId = new CreditGuaranteeId(institute.getInstituteCode(), "2019", 1);
         CreditGuarantee creditGuarantee = creditGuaranteeRepository.save(new CreditGuarantee(creditGuaranteeId, 2000l));
 
-        CreditGuaranteeId creditGuaranteeId2 = new CreditGuaranteeId(institute.getInstituteCode(), "2019", "02");
+        CreditGuaranteeId creditGuaranteeId2 = new CreditGuaranteeId(institute.getInstituteCode(), "2019", 1);
         CreditGuarantee creditGuarantee2 = creditGuaranteeRepository.save(new CreditGuarantee(creditGuaranteeId2, 4000l));
 
 
