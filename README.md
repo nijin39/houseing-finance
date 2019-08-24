@@ -95,6 +95,28 @@ cd client; yarn start
 
 ### JWT Token
 
+#### 1. Registration Account
+```sh
+curl -X POST \
+  http://localhost:8080/register \
+  -H 'content-type: application/json' \
+  -d '{
+	"username":"nijin39",
+	"password":"korea123"
+}'
+```
+
+#### 2. Singin(publishing token)
+```sh
+curl -X POST \
+  http://localhost:8080/authenticate \
+  -H 'content-type: application/json' \
+  -d '{
+	"username":"nijin39",
+	"password":"korea123"
+}'
+```
+
 ### API
 
 #### 1.
