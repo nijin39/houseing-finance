@@ -45,15 +45,14 @@ public class AdminController {
 
         CSVParser records = CSVFormat.EXCEL.withFirstRecordAsHeader().parse(new InputStreamReader(file.getInputStream()));
 
+        //01. 헤더 DB저장
         List<String> csvHeader = records.getHeaderMap().keySet().stream().skip(2).collect(Collectors.toList());
         instituteService.AddInstituteList(csvHeader);
 
-        log.info("Excel Import 시작");
+        //02. 내용 DB 저장
         Stream<Map<String, String>> csvData = StreamSupport.stream(records.spliterator(), false)
                 .map(record -> record.toMap());
         creditGuaranteeService.importCsv(csvData);
-
-
 
         return null;
     }
