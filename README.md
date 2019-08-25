@@ -44,56 +44,48 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
-해당 프로젝트는 
-There are many great README templates available on GitHub, however, I didn't find one that really suit my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need.
-
-Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should element DRY principles to the rest of your life :smile:
-
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue.
-
-A list of commonly used resources that I find helpful are listed in the acknowledgements.
+ 해당 어플리케이션은 국낸 주택금융 신용보증 기관으로부터 년도별 각 금융기관(은행)에서 신용보증한 금액을 제공 받아. 현재 현황에 대한 리포팅 및 검색 기능과 과거의 데이터를 기반으로 하여 미래의 특점시점에 신용보증 금액에 대한 예측을 수행하는 것이 목표입니다.
 
 ### Built With
-This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-* [Bootstrap](https://getbootstrap.com)
-* [JQuery](https://jquery.com)
-* [Laravel](https://laravel.com)
-
+* [Spring Boot](https://getbootstrap.com)
+* [React](https://jquery.com)
+* [Spring Data Cache](https://laravel.com)
+* [JJWT](https://laravel.com)
+* [Lombok](https://laravel.com)
+* [Springfox-Swagger2](https://laravel.com)
+* [qlrm](https://laravel.com)
+* [assertj-core](https://laravel.com)
+* [apache common math](https://laravel.com)
 
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
 ### Prerequisites
 
 This is an example of how to list things you need to use the software and how to install them.
-* npm
+* yarn 
 ```sh
-npm install npm@latest -g
+yarn install
 ```
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
 ```sh
-git clone https:://github.com/your_username_/Project-Name.git
+https://github.com/nijin39/houseing-finance.git
 ```
-3. Install NPM packages
+2. Start Backend 
 ```sh
-npm install
+./gradlew bootRun
 ```
-4. Enter your API in `config.js`
-```JS
-const API_KEY = 'ENTER YOUR API';
+3. Start Frontend
+```sh
+cd client; yarn start
+```
+4. Build & Packging
+```sh
+./gradlew build buildClient
 ```
 
 
@@ -101,17 +93,148 @@ const API_KEY = 'ENTER YOUR API';
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+### JWT Token
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+#### 1. Registration Account
+```sh
+curl -X POST \
+  http://localhost:8080/register \
+  -H 'content-type: application/json' \
+  -d '{
+	"username":"nijin39",
+	"password":"korea123"
+}'
+```
+
+#### 2. Singin(publishing token)
+```sh
+curl -X POST \
+  http://localhost:8080/authenticate \
+  -H 'content-type: application/json' \
+  -d '{
+	"username":"nijin39",
+	"password":"korea123"
+}'
+```
+
+### API
+
+#### 1. Upload CSV
+```sh
+curl -X POST \
+  http://localhost:8080/upload \
+  -H 'authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaWppbjM5IiwiZXhwIjoxNTY2NjgxMjI4LCJpYXQiOjE1NjY2NjMyMjh9.A87NDjDHW6x_0AE6IcZMmTiczbIHnHHx-fmDsnhnCGyQYcSE67hPL4Lx4v7EWO6aDBv5w9AzbiErQVkzS_vfhg' \
+  -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
+  -F file=@aa.csv \
+  -F charset=UTF-8
+```
+
+#### 2. Show all institute
+```sh
+curl -X GET \
+  http://localhost:8080/api/institutes \
+  -H 'authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaWppbjM5IiwiZXhwIjoxNTY2NjgxMjI4LCJpYXQiOjE1NjY2NjMyMjh9.A87NDjDHW6x_0AE6IcZMmTiczbIHnHHx-fmDsnhnCGyQYcSE67hPL4Lx4v7EWO6aDBv5w9AzbiErQVkzS_vfhg' \
+```
+
+#### 3. Show Annual Report
+```sh
+curl -X GET \
+  http://localhost:8080/api/creditGuarantee/annualReport \
+  -H 'authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaWppbjM5IiwiZXhwIjoxNTY2NjgxMjI4LCJpYXQiOjE1NjY2NjMyMjh9.A87NDjDHW6x_0AE6IcZMmTiczbIHnHHx-fmDsnhnCGyQYcSE67hPL4Lx4v7EWO6aDBv5w9AzbiErQVkzS_vfhg' \
+```
+
+#### 4. Max Amount Institute
+```sh
+curl -X GET \
+  http://localhost:8080/api/creditGuarantee/institute/max-amount \
+  -H 'authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaWppbjM5IiwiZXhwIjoxNTY2NjgxMjI4LCJpYXQiOjE1NjY2NjMyMjh9.A87NDjDHW6x_0AE6IcZMmTiczbIHnHHx-fmDsnhnCGyQYcSE67hPL4Lx4v7EWO6aDBv5w9AzbiErQVkzS_vfhg' \
+  ```
 
 
+<!-- Archetecure -->
+## Architecture
+
+### Package
+
+패키징은 기본적으로 DDD Architecture 가이드를 따라 설계되었으며, 아래와 같이 구성된다. 금융기관은 별도로 모델링 되어지도록 제약이 주어졌다.
+creditguarantee(주택금융 공급)에는 통계 원본 데이터가 적재되며, 추후 연산 요청이 많은 경우를 대비하여 통계에 대한 별도 서머리 엔티디를 만들었다.
+
+CreditGuarantee Domain에 대해 주로 요청되어지는 작업이 조회성 작업이기 때문에 효율성을 고려하여 CQRS를 적용하였다.
+```
+.
+└── housingfinance
+    ├── account(계정)
+    │   ├── application
+    │   ├── domain
+    │   └── ui
+    ├── admin(Admin Client)
+    │   └── ui
+    ├── common
+    │   ├── config
+    │   ├── domain
+    │   └── util
+    ├── creditguarantee(주택금융 공급)
+    │   ├── command
+    │   ├── infra
+    │   ├── query
+    │   └── ui
+    ├── creditguaranteesummary(주택금융 공급 통계)
+    │   ├── application
+    │   ├── domain
+    │   ├── infra
+    │   └── ui
+    ├── HousingFinanceApplication.java
+    └── institute(금융기관)
+        ├── application
+        ├── domain
+        ├── infra
+        └── ui
+```
+
+### DDD
+
+institute / creditguarantee / creditguaranteesummary를 각각의 도메인으로 정리 하였고, JPA의 관계 설정에서 일어나는 문제(eager, lazy loding, 그래프 검색의 남용에 따른 도메인 로직의 응집도 저하)를 막기 위해 다른 도메인을 참조할 때는 ID 참조를 이용하였다. 또한 creditguarantee, creditguaranteesummary에서는 비즈니스의 의도가 드러나도록 Composite Key를 사용하였다.
+
+### CQRS
+
+JPA를 사용한다 하여도, 명령(Command), 조회(Query)에 대해서 효율적인 모델링을 적용할 수 있다. 아래와 같이 동일한 도메인에 대해서 Command, Query에 따라 별도의 모델링을 적용하여 유연하게 시스템을 설계하고자 하였다.  
+```
+├── command
+│   ├── application
+│   └── domain
+├── infra
+│   ├── CreditGuaranteeJpaRepository.java
+│   └── CreditGuaranteePredicateApache.java
+├── query
+│   ├── application
+│   ├── dao
+│   └── dto
+└── ui
+    └── CreditGuaranteeRestController.java
+```
+
+### Domain Event
+
+현재 어플리케이션에 조회성 기능이 많고 동시에 조회성 기능에 대한 요구가 증가했을 경우 시스템의 부하에 관한 문제를 일으킬 수 있기 때문에
+데이터의 변경이 있을 경우에 통계 도메인을 업데이트 하게 하였다. 이 두 도메인의 연동은 JPA의 도메인 이벤트를 활용하여 결합도를 낮추었다.
+```
+    @DomainEvents
+    Collection<Object> domainEvents() {
+        List<Object> result = new ArrayList<Object>();
+        result.add(new CreditGuaranteeSavedEvent(this));
+        return result;
+    }
+    
+    @EventListener
+    public void creditGuaranteeSavedEventHandler(CreditGuaranteeSavedEvent event) {
+```
 
 <!-- ROADMAP -->
+
 ## Roadmap
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a list of proposed features (and known issues).
-
+### 예측 모델의 고도화
+### React UI 개발
 
 
 <!-- CONTRIBUTING -->
