@@ -239,8 +239,18 @@ JPA를 사용한다 하여도, 명령(Command), 조회(Query)에 대해서 효�
 ## TODO
 - [X] 개발환경 구성 : Spring Boot2, React
 - [X] 요구사항 분석 및 Domain 파악
-- [ ] 각 모듈에 대한 패키지 구성
-  - [ ] Institute : 
+- [X] 각 모듈에 대한 패키지 구성
+  - [X] Institute : 금융기관
+  - [X] CreditGuarantee : 주택금융지원액
+  - [X] CreditGuaranteeSummary : 주택금융지원통계
+  - [X] Admin : 사용자 UI
+  - [X] Account : 사용자 계정 관련
+- [X] 도메인/도메인 서비스에 대한 단위 테스트 적용
+- [X] CreditGuarantee CQRS 패턴 적용
+- [X] CreditGuarantee qlrm을 통한 조회모델 적용
+- [X] 예측모델 적용(Lianer Reggression)
+- [ ] Jwt 인증 적
+- [ ] 통합테스트 
 
 
 <!-- CONTRIBUTING -->
