@@ -59,7 +59,6 @@ ext {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    compile('org.springframework.boot:spring-boot-starter-data-rest')
     compile("org.springframework.boot:spring-boot-starter-cache")
     compile group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
     compile("org.springframework.boot:spring-boot-starter-security")
@@ -76,6 +75,7 @@ dependencies {
     runtimeOnly 'mysql:mysql-connector-java'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testCompile group: 'org.assertj', name: 'assertj-core', version: '3.13.2'
 }

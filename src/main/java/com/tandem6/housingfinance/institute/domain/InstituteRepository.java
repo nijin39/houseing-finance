@@ -11,7 +11,9 @@ public interface InstituteRepository {
 
     @Cacheable("instituteByName")
     Optional<Institute> findByInstituteName(String instituteName);
+
     @Cacheable("instituteByCode")
     Optional<Institute> findByInstituteCode(String instituteCode);
+
     Institute save(Institute institute);
 }

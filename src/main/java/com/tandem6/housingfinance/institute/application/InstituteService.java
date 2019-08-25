@@ -27,16 +27,15 @@ public class InstituteService {
         return instituteRepository.findAll();
     }
 
-    public void AddInstitute(String instituteName) throws InstituteException {
+    public Institute AddInstitute(String instituteName) throws InstituteException {
 
         if( !instituteRepository.findByInstituteName(instituteName).isPresent() ){
-            instituteRepository.save(new Institute(instituteName));
+            cacheManager.getCache("instituteByName").clear();
+            cacheManager.getCache("instituteByCode").clear();
+            return instituteRepository.save(new Institute(instituteName));
         } else {
             throw new InstituteException("이미 등록된 기관이 있습니다.", 1L);
         }
-
-        cacheManager.getCache("instituteByName").clear();
-        cacheManager.getCache("instituteByCode").clear();
     }
 
     public void AddInstituteList(List<String> instituteNameList){
