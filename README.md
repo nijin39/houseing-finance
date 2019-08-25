@@ -236,6 +236,12 @@ JPA를 사용한다 하여도, 명령(Command), 조회(Query)에 대해서 효�
 ### 예측 모델의 고도화
 ### React UI 개발
 
+## TODO
+- [X] 개발환경 구성 : Spring Boot2, React
+- [X] 요구사항 분석 및 Domain 파악
+- [ ] 각 모듈에 대한 패키지 구성
+  - [ ] Institute : 
+
 
 <!-- CONTRIBUTING -->
 ## Contributing
