@@ -1,42 +1,96 @@
 package com.tandem6.housingfinance.creditguarantee.ui;
 
+import com.tandem6.housingfinance.account.application.JwtUserDetailsService;
+import com.tandem6.housingfinance.common.config.JwtAuthenticationEntryPoint;
+import com.tandem6.housingfinance.common.util.JwtTokenUtil;
 import com.tandem6.housingfinance.creditguarantee.command.application.CreditGuaranteeService;
 import com.tandem6.housingfinance.creditguarantee.command.domain.CreditGuarantee;
 import com.tandem6.housingfinance.creditguarantee.command.domain.CreditGuaranteeId;
 import com.tandem6.housingfinance.creditguarantee.query.application.AmountReportService;
 import com.tandem6.housingfinance.creditguarantee.query.dto.*;
+import com.tandem6.housingfinance.institute.application.InstituteService;
+import com.tandem6.housingfinance.institute.ui.InstituteRestController;
+import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@RunWith(SpringRunner.class)
+@WebMvcTest(value= CreditGuaranteeRestController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 public class CreditGuaranteeRestControllerTest {
-    @Mock
-    CreditGuaranteeService creditGuaranteeService;
-    @Mock
-    AmountReportService amountReportService;
-    @InjectMocks
-    CreditGuaranteeRestController creditGuaranteeRestController;
+    @Autowired private MockMvc mvc;
 
-    @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
+    @MockBean private JwtTokenUtil jwtTokenUtil;
+    @MockBean private JwtUserDetailsService jwtUserDetailsService;
+    @MockBean private InstituteService instituteService;
+    @MockBean private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+    @MockBean AmountReportService amountReportService;
+    @MockBean CreditGuaranteeService creditGuaranteeService;
+    @Autowired CreditGuaranteeRestController creditGuaranteeRestController;
+
+    @Test
+    @WithMockUser(username="spring")
+    public void T01_Credit_Guarantee_빈값일_때() throws Exception {
+
+        List emptyList = Collections.EMPTY_LIST;
+        when(creditGuaranteeService.findAllCreditGuarantees()).thenReturn(emptyList);
+
+        //When
+        ResultActions actions = mvc
+                .perform(get("/api/creditGuarantees")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print());
+
+        //Then
+        actions.andExpect(status().isNoContent());
     }
 
     @Test
-    public void testFindAllCreditGuarantees() throws Exception {
-        when(creditGuaranteeService.findAllCreditGuarantees()).thenReturn(Arrays.<CreditGuarantee>asList(new CreditGuarantee(new CreditGuaranteeId("instituteCode", "year", Integer.valueOf(0)), Long.valueOf(1))));
+    @WithMockUser(username="spring")
+    public void T02_Credit_Guarantee_정상적으로_존재할_때() throws Exception {
+        CreditGuaranteeId creditGuaranteeId = new CreditGuaranteeId("bnk0001","2017", 12);
+        CreditGuarantee creditGuarantee = new CreditGuarantee(creditGuaranteeId, 100L);
+        CreditGuaranteeId creditGuaranteeId1 = new CreditGuaranteeId("bnk0001","2018", 12);
+        CreditGuarantee creditGuarantee1 = new CreditGuarantee(creditGuaranteeId1, 200L);
+        List<CreditGuarantee> creditGuaranteeList = Arrays.asList(creditGuarantee, creditGuarantee1);
+        when(creditGuaranteeService.findAllCreditGuarantees()).thenReturn(creditGuaranteeList);
 
-        List<CreditGuarantee> result = creditGuaranteeRestController.findAllCreditGuarantees();
-        Assert.assertEquals(Arrays.<CreditGuarantee>asList(new CreditGuarantee(new CreditGuaranteeId("instituteCode", "year", Integer.valueOf(0)), Long.valueOf(1))), result);
+        //When
+        ResultActions actions = mvc
+                .perform(get("/api/creditGuarantees")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print());
+
+        //Then
+        actions.andExpect(status().isOk())
+               .andExpect(jsonPath("$", hasSize(2)));
+
     }
 
     @Test

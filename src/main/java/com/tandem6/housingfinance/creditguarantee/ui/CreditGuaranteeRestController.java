@@ -7,11 +7,14 @@ import com.tandem6.housingfinance.creditguarantee.query.dto.AmountAnnualReport;
 import com.tandem6.housingfinance.creditguarantee.query.dto.MaxAmountInstitute;
 import com.tandem6.housingfinance.creditguarantee.query.dto.MaxAndMinAverageByInstituteDto;
 import com.tandem6.housingfinance.creditguarantee.query.dto.MaxAndMinYearDto;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -27,8 +30,14 @@ public class CreditGuaranteeRestController {
     }
 
     @GetMapping("/creditGuarantees")
-    public List<CreditGuarantee> findAllCreditGuarantees(){
-        return creditGuaranteeService.findAllCreditGuarantees();
+    public ResponseEntity<List<CreditGuarantee>> findAllCreditGuarantees(){
+
+        List<CreditGuarantee> allCreditGuarantees = creditGuaranteeService.findAllCreditGuarantees();
+        if( allCreditGuarantees.isEmpty() ) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(Collections.emptyList());
+        } else {
+            return ResponseEntity.ok(allCreditGuarantees);
+        }
     }
 
     @GetMapping("/creditGuarantee/years")

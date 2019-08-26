@@ -3,33 +3,53 @@ package com.tandem6.housingfinance.creditguaranteesummary.application;
 import com.tandem6.housingfinance.creditguaranteesummary.domain.CreditGuaranteeSummary;
 import com.tandem6.housingfinance.creditguaranteesummary.domain.CreditGuaranteeSummaryId;
 import com.tandem6.housingfinance.creditguaranteesummary.domain.CreditGuaranteeSummaryRepository;
-import org.junit.Assert;
-import org.junit.Before;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.mockito.Mockito.*;
+import java.util.Optional;
 
+import static org.mockito.Mockito.when;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = {CreditGuaranteeSummaryService.class})
 public class CreditGuaranteeSummaryServiceTest {
-    @Mock
+    @MockBean
     CreditGuaranteeSummaryRepository creditGuaranteeSummaryRepository;
-    @InjectMocks
+
+    @Autowired
     CreditGuaranteeSummaryService creditGuaranteeSummaryService;
 
-    @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
+    @Test(expected = CreditGuaranteeSummaryExcpetion.class)
+    public void T01_CreditGuaranteeSummary_최대값이_존재하지_않는_경우() throws Exception {
+
+        //Given
+        CreditGuaranteeSummaryId creditGuaranteeSummaryId = new CreditGuaranteeSummaryId("기업은행", "2017");
+        CreditGuaranteeSummary creditGuaranteeSummary = new CreditGuaranteeSummary(creditGuaranteeSummaryId, 100l);
+
+        when(creditGuaranteeSummaryRepository.findFirstByOrderByAmountDesc()).thenReturn(Optional.empty());
+
+        //When
+        CreditGuaranteeSummary result = creditGuaranteeSummaryService.findFirstByOrderByAmountDesc();
     }
 
     @Test
-    public void testFindFirstByOrderByAmountDesc() throws Exception {
-        when(creditGuaranteeSummaryRepository.findFirstByOrderByAmountDesc()).thenReturn(null);
+    public void T02_CreditGuaranteeSummary_최대값이_존재하는_경우() throws Exception {
 
+        //Given
+        CreditGuaranteeSummaryId creditGuaranteeSummaryId = new CreditGuaranteeSummaryId("기업은행", "2017");
+        CreditGuaranteeSummary creditGuaranteeSummary = new CreditGuaranteeSummary(creditGuaranteeSummaryId, 100l);
+
+        when(creditGuaranteeSummaryRepository.findFirstByOrderByAmountDesc()).thenReturn(Optional.of(creditGuaranteeSummary));
+
+        //When
         CreditGuaranteeSummary result = creditGuaranteeSummaryService.findFirstByOrderByAmountDesc();
-        Assert.assertEquals(new CreditGuaranteeSummary(new CreditGuaranteeSummaryId("instituteName", "year"), Long.valueOf(1)), result);
+
+        //Then
+        Assertions.assertThat(result.getAmount()).isEqualTo(100L);
     }
 }
-
-//Generated with love by TestMe :) Please report issues and submit feature requests at: http://weirddev.com/forum#!/testme

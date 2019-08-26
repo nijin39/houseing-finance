@@ -3,29 +3,20 @@ package com.tandem6.housingfinance.institute.application;
 import com.tandem6.housingfinance.institute.domain.Institute;
 import com.tandem6.housingfinance.institute.domain.InstituteException;
 import com.tandem6.housingfinance.institute.domain.InstituteRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
-@Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class InstituteServiceTest {

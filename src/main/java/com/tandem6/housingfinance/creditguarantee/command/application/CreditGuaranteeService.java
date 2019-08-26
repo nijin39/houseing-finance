@@ -65,6 +65,11 @@ public class CreditGuaranteeService {
     private void generate(Map<String, String> data) {
         String year = data.get(YEAR);
         String month = data.get(MONTH);
+
+        if(isNull(year) || isNull(month)){
+            return;
+        }
+
         data.forEach((instituteName, amount) -> {
             if (!instituteName.equals(YEAR) && !instituteName.equals(MONTH)) {
                 Optional<Institute> instituteCode = instituteRepository.findByInstituteName(instituteName);
@@ -80,5 +85,9 @@ public class CreditGuaranteeService {
                 });
             }
         });
+    }
+
+    private boolean isNull(String year) {
+        return year == null || year.length() == 0;
     }
 }

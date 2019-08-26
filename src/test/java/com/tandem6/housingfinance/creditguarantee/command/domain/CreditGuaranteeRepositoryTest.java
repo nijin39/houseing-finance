@@ -1,11 +1,7 @@
 package com.tandem6.housingfinance.creditguarantee.command.domain;
 
-import com.tandem6.housingfinance.creditguarantee.command.domain.CreditGuarantee;
-import com.tandem6.housingfinance.creditguarantee.command.domain.CreditGuaranteeId;
-import com.tandem6.housingfinance.creditguarantee.command.domain.CreditGuaranteeRepository;
 import com.tandem6.housingfinance.institute.domain.Institute;
 import com.tandem6.housingfinance.institute.domain.InstituteRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +14,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.transaction.Transactional;
 import java.util.List;
 
-@Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class CreditGuaranteeRepositoryTest {

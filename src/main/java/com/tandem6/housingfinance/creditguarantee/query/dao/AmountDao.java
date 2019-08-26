@@ -33,12 +33,19 @@ public class AmountDao {
         List<CreditGuaranteeSummary> creditGuaranteeSummaryList = queryExecutor.executeSelect(entityManager, CreditGuaranteeSummary.class, "query/AllCreditGuaranteeSummary.sql");
         CreditGuaranteeSummary maxCreditGuaranteeSummary = maxCreditGuaranteeSummary(instituteName, creditGuaranteeSummaryList);
         CreditGuaranteeSummary minCreditGuaranteeSummary = getCreditGuaranteeMinAmount(instituteName, creditGuaranteeSummaryList);
+        MaxAndMinAverageByInstituteDto maxAndMinAverageByInstituteDto = convertMaxAndMinAverageByInstituteDto(instituteName, maxCreditGuaranteeSummary, minCreditGuaranteeSummary);
+
+        return maxAndMinAverageByInstituteDto;
+    }
+
+    private MaxAndMinAverageByInstituteDto convertMaxAndMinAverageByInstituteDto(String instituteName, CreditGuaranteeSummary maxCreditGuaranteeSummary, CreditGuaranteeSummary minCreditGuaranteeSummary) {
+        //DTO 변환
         MaxAndMinAverageByInstituteDto maxAndMinAverageByInstituteDto = new MaxAndMinAverageByInstituteDto(instituteName);
-        maxAndMinAverageByInstituteDto.addSupportAmount(
-                new AmountByYear(Integer.valueOf(maxCreditGuaranteeSummary.getYear()), maxCreditGuaranteeSummary.getTotal()/12)
+        maxAndMinAverageByInstituteDto.addSupportAmount(                              //16.6
+                new AmountByYear(Integer.valueOf(maxCreditGuaranteeSummary.getYear()), Math.round((float)maxCreditGuaranteeSummary.getTotal()/12))
         );
         maxAndMinAverageByInstituteDto.addSupportAmount(
-                new AmountByYear(Integer.valueOf(minCreditGuaranteeSummary.getYear()), minCreditGuaranteeSummary.getTotal()/12)
+                new AmountByYear(Integer.valueOf(minCreditGuaranteeSummary.getYear()), Math.round((float)minCreditGuaranteeSummary.getTotal()/12))
         );
         return maxAndMinAverageByInstituteDto;
     }

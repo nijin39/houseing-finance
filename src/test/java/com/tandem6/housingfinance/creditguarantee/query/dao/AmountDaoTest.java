@@ -1,59 +1,75 @@
 package com.tandem6.housingfinance.creditguarantee.query.dao;
 
-import com.tandem6.housingfinance.creditguarantee.query.dto.*;
-import org.junit.Assert;
+import com.tandem6.housingfinance.creditguarantee.command.domain.CreditGuarantee;
+import com.tandem6.housingfinance.creditguarantee.command.domain.CreditGuaranteeId;
+import com.tandem6.housingfinance.creditguarantee.command.domain.CreditGuaranteeRepository;
+import com.tandem6.housingfinance.creditguarantee.query.dto.AmountAnnualReport;
+import com.tandem6.housingfinance.creditguarantee.query.dto.MaxAmountInstitute;
+import com.tandem6.housingfinance.creditguarantee.query.dto.MaxAndMinAverageByInstituteDto;
+import com.tandem6.housingfinance.creditguarantee.query.dto.MaxAndMinYearDto;
+import com.tandem6.housingfinance.institute.domain.Institute;
+import com.tandem6.housingfinance.institute.domain.InstituteRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.slf4j.Logger;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
-import java.util.Arrays;
-import java.util.HashMap;
+import javax.transaction.Transactional;
 import java.util.List;
 
-import static org.mockito.Mockito.*;
-
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@Transactional
+@Rollback(value = true)
 public class AmountDaoTest {
-    @Mock
-    EntityManager entityManager;
-    @Mock
-    Logger log;
-    @InjectMocks
-    AmountDao amountDao;
+
+    @Autowired InstituteRepository instituteRepository;
+    @Autowired CreditGuaranteeRepository creditGuaranteeRepository;
+    @Autowired EntityManager entityManager;
+    @Autowired AmountDao amountDao;
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        instituteRepository.save(new Institute("bnk0001", "기업은행"));
+
+        CreditGuaranteeId creditGuaranteeId = new CreditGuaranteeId("bnk0001","2017", 12);
+        CreditGuarantee creditGuarantee = new CreditGuarantee(creditGuaranteeId, 100L);
+        creditGuaranteeRepository.save(creditGuarantee);
+        CreditGuaranteeId creditGuaranteeId1 = new CreditGuaranteeId("bnk0001","2018", 12);
+        CreditGuarantee creditGuarantee1 = new CreditGuarantee(creditGuaranteeId1, 200L);
+        creditGuaranteeRepository.save(creditGuarantee1);
     }
 
     @Test
-    public void testGetMaxAndMinYear() throws Exception {
+    public void T01_정상적으로_최소_최대_Year값_리턴() throws Exception {
         List<MaxAndMinYearDto> result = amountDao.getMaxAndMinYear();
-        Assert.assertEquals(Arrays.<MaxAndMinYearDto>asList(new MaxAndMinYearDto("maxYear", "minYear")), result);
+        Assertions.assertThat( result.get(0).getMinYear()).isEqualTo("2017");
+        Assertions.assertThat( result.get(0).getMaxYear()).isEqualTo("2018");
     }
 
     @Test
-    public void testGetMaxAndMinAverage() throws Exception {
-        MaxAndMinAverageByInstituteDto result = amountDao.getMaxAndMinAverage("instituteName");
-        Assert.assertEquals(new MaxAndMinAverageByInstituteDto("instituteName", Arrays.<AmountByYear>asList(new AmountByYear(Integer.valueOf(0), Integer.valueOf(0)))), result);
+    public void T02_최대_최소_지원해_평균_리턴() throws Exception {
+        MaxAndMinAverageByInstituteDto result = amountDao.getMaxAndMinAverage("기업은행");
+        Assertions.assertThat( result.getSupport_amount().get(0).getAmount() ).isEqualTo(17);
+        Assertions.assertThat( result.getSupport_amount().get(1).getAmount() ).isEqualTo(8);
     }
 
     @Test
-    public void testGetMaxAmountInstitute() throws Exception {
+    public void T03_최대지원_금융기관_리턴() throws Exception {
         MaxAmountInstitute result = amountDao.getMaxAmountInstitute();
-        Assert.assertEquals(new MaxAmountInstitute(Integer.valueOf(0), "bank"), result);
+        Assertions.assertThat( result.getBank() ).isEqualTo("기업은행");
+        Assertions.assertThat( result.getYear() ).isEqualTo(2018);
     }
 
     @Test
-    public void testGenerateAmountAnnualReport() throws Exception {
+    public void T04_정상적인_연간리포트_출력() throws Exception {
         AmountAnnualReport result = amountDao.generateAmountAnnualReport();
-        Assert.assertEquals(new AmountAnnualReport(Arrays.<AnnualReport>asList(new AnnualReport(Integer.valueOf(0), Integer.valueOf(0), new HashMap<String, Integer>() {{
-            put("String", Integer.valueOf(0));
-        }}))), result);
+        Assertions.assertThat( result.getAnnualReportList() ).hasSize(2);
     }
 }
 
-//Generated with love by TestMe :) Please report issues and submit feature requests at: http://weirddev.com/forum#!/testme

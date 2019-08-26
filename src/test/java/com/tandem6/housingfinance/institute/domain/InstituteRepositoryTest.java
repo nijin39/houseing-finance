@@ -1,8 +1,6 @@
 package com.tandem6.housingfinance.institute.domain;
 
-import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +11,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.TransactionSystemException;
 
 import javax.transaction.Transactional;
-import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 
-@Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class InstituteRepositoryTest {
@@ -39,7 +35,6 @@ public class InstituteRepositoryTest {
         instituteRepository.save(institute);
 
         List<Institute> instituteList = instituteRepository.findAll();
-        log.info(institute.toString());
 
         Assertions.assertThat(instituteList).isNotEmpty();
     }
@@ -52,7 +47,6 @@ public class InstituteRepositoryTest {
         instituteRepository.save(institute2);
 
         List<Institute> instituteList = instituteRepository.findAll();
-        log.info(instituteList.toString());
 
         Assertions.assertThat(instituteList).hasSize(2);
     }
