@@ -94,19 +94,60 @@ public class CreditGuaranteeRestControllerTest {
     }
 
     @Test
-    public void testFindAllCreditGuaranteeYears() throws Exception {
-        when(amountReportService.getMaxAndMinYear()).thenReturn(Arrays.<MaxAndMinYearDto>asList(new MaxAndMinYearDto("maxYear", "minYear")));
+    @WithMockUser(username="spring")
+    public void T03_MaxAndMinYear가_존재할_때() throws Exception {
+        //Given
+        when(amountReportService.getMaxAndMinYear()).thenReturn(Collections.EMPTY_LIST);
 
-        List<MaxAndMinYearDto> result = creditGuaranteeRestController.findAllCreditGuaranteeYears();
-        Assert.assertEquals(Arrays.<MaxAndMinYearDto>asList(new MaxAndMinYearDto("maxYear", "minYear")), result);
+        //When /creditGuarantee/years
+        //When
+        ResultActions actions = mvc
+                .perform(get("/api/creditGuarantee/years")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print());
+
+        //Then
+        //Then
+        actions.andExpect(status().isNoContent());
+    }
+
+
+    @Test
+    @WithMockUser(username="spring")
+    public void T04_MaxAndMinYear가_존재할_때() throws Exception {
+        //Given
+        MaxAndMinYearDto maxAndMinYearDto = new MaxAndMinYearDto("2017", "2019");
+        when(amountReportService.getMaxAndMinYear()).thenReturn(Arrays.asList(maxAndMinYearDto));
+
+        //When /creditGuarantee/years
+        //When
+        ResultActions actions = mvc
+                .perform(get("/api/creditGuarantee/years")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print());
+
+        //Then
+        //Then
+
     }
 
     @Test
-    public void testGetMaxAmountInstitute() throws Exception {
+    @WithMockUser(username="spring")
+    public void T05_금융기관에_대한_max_amount가_미_존재할_때() throws Exception {
+
+    }
+
+    @Test
+    @WithMockUser(username="spring")
+    public void T06_금융기관에_대한_max_amount가_존재할_때() throws Exception {
         when(amountReportService.getMaxAmountInstitute()).thenReturn(new MaxAmountInstitute(Integer.valueOf(0), "bank"));
 
-        MaxAmountInstitute result = creditGuaranteeRestController.getMaxAmountInstitute();
-        Assert.assertEquals(new MaxAmountInstitute(Integer.valueOf(0), "bank"), result);
+        ResultActions actions = mvc
+                .perform(get("/api/creditGuarantee/institute/max-amount")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print());
+
+        actions.andExpect(status().isOk());
     }
 
     @Test
@@ -137,5 +178,3 @@ public class CreditGuaranteeRestControllerTest {
         }}))), result);
     }
 }
-
-//Generated with love by TestMe :) Please report issues and submit feature requests at: http://weirddev.com/forum#!/testme

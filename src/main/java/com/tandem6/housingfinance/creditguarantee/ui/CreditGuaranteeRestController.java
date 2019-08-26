@@ -33,21 +33,20 @@ public class CreditGuaranteeRestController {
     public ResponseEntity<List<CreditGuarantee>> findAllCreditGuarantees(){
 
         List<CreditGuarantee> allCreditGuarantees = creditGuaranteeService.findAllCreditGuarantees();
-        if( allCreditGuarantees.isEmpty() ) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(Collections.emptyList());
-        } else {
-            return ResponseEntity.ok(allCreditGuarantees);
-        }
+        return getListResponseEntity(allCreditGuarantees);
     }
 
     @GetMapping("/creditGuarantee/years")
-    public List<MaxAndMinYearDto> findAllCreditGuaranteeYears(){
-        return amountReportService.getMaxAndMinYear();
+    public ResponseEntity<List<MaxAndMinYearDto>> findAllCreditGuaranteeYears(){
+
+        List<MaxAndMinYearDto> maxAndMinYear = amountReportService.getMaxAndMinYear();
+        return getListResponseEntity(maxAndMinYear);
     }
 
     @GetMapping("/creditGuarantee/institute/max-amount")
-    public MaxAmountInstitute getMaxAmountInstitute(){
-        return amountReportService.getMaxAmountInstitute();
+    public ResponseEntity<MaxAmountInstitute> getMaxAmountInstitute(){
+        MaxAmountInstitute maxAmountInstitute = amountReportService.getMaxAmountInstitute();
+        return ResponseEntity.ok(maxAmountInstitute);
     }
 
     @GetMapping("/creditGuarantee/institute/{instituteName}/max-min-average")
@@ -68,5 +67,13 @@ public class CreditGuaranteeRestController {
     @GetMapping("/creditGuarantee/annualReport")
     public AmountAnnualReport getAnnualReport(){
         return amountReportService.generateAmountAnnualReport();
+    }
+
+    private <T> ResponseEntity<List<T>> getListResponseEntity(List<T> maxAndMinYear) {
+        if( maxAndMinYear.isEmpty() ) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(Collections.emptyList());
+        } else {
+            return ResponseEntity.ok(maxAndMinYear);
+        }
     }
 }

@@ -23,7 +23,8 @@ public class AmountReportService {
     }
 
     public MaxAmountInstitute getMaxAmountInstitute() {
-        return amountDao.getMaxAmountInstitute();
+        MaxAmountInstitute maxAmountInstitute = amountDao.getMaxAmountInstitute();
+        return maxAmountInstitute;
     }
 
     public MaxAndMinAverageByInstituteDto getMaxAndMinAverage(String instituteName){
