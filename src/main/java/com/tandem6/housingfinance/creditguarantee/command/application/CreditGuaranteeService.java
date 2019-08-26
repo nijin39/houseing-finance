@@ -69,9 +69,14 @@ public class CreditGuaranteeService {
             if (!instituteName.equals(YEAR) && !instituteName.equals(MONTH)) {
                 Optional<Institute> instituteCode = instituteRepository.findByInstituteName(instituteName);
                 instituteCode.ifPresent(institute -> {
-                    CreditGuaranteeId creditGuaranteeId = new CreditGuaranteeId(institute.getInstituteCode(), year, Integer.valueOf(month));
-                    CreditGuarantee creditGuarantee = new CreditGuarantee(creditGuaranteeId, Long.valueOf(amount.replaceAll("[^\\d.]", "")));
-                    creditGuaranteeRepository.save(creditGuarantee);
+                    try {
+                        CreditGuaranteeId creditGuaranteeId = new CreditGuaranteeId(institute.getInstituteCode(), year, Integer.valueOf(month));
+                        CreditGuarantee creditGuarantee = new CreditGuarantee(creditGuaranteeId, Long.valueOf(amount.replaceAll("[^\\d.]", "")));
+                        creditGuaranteeRepository.save(creditGuarantee);
+                    } catch(NumberFormatException nfe) {
+                        log.warn("AMOUNT에 올바른 데이터가 입력되지 않았습니다.s");
+                    }
+
                 });
             }
         });

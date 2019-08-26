@@ -64,7 +64,28 @@ public class CreditGuaranteeServiceTest {
     public void 연도나월이없는경(){}
 
     @Test
-    public void 값이숫자가아닌경우(){}
+    public void 값이우_숫자가_아닌_경우(){
+        //Given
+        Map<String, String> map = Stream.of(new String[][] {
+                { "하나은행", "abcd" },
+                { "월", "2" },
+                { "연도", "2017" },
+        }).collect(Collectors.toMap(data -> data[0], data -> data[1]));
+
+        when(instituteRepository.findByInstituteName("하나은행")).thenReturn(Optional.of(new Institute("bnk0001","하나은행" )));
+
+        Stream<Map<String, String>> builderStream =
+                Stream.<Map<String,String>>builder()
+                        .add(map)
+                        .build();
+
+        //When
+        creditGuaranteeService.importCsv(builderStream);
+
+        //Then
+        CreditGuaranteeId creditGuaranteeId = new CreditGuaranteeId("bnk0001","2017", 2);
+        verify(creditGuaranteeRepository, times(0)).save( new CreditGuarantee(creditGuaranteeId, 5746L) );
+    }
 
     @Test
     public void testImportCsv() throws Exception {
