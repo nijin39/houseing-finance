@@ -32,7 +32,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             // -- jwt
             "/authenticate",
             "/register",
-            "/h2-console/**"
+            "/h2-console/**",
+            // --refresh
+            "/refreshToken"
     };
 
     @Autowired
