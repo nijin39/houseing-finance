@@ -9,15 +9,19 @@ import com.tandem6.housingfinance.creditguarantee.query.dto.AmountAnnualReport;
 import com.tandem6.housingfinance.creditguarantee.query.dto.MaxAmountInstitute;
 import com.tandem6.housingfinance.creditguarantee.query.dto.MaxAndMinAverageByInstituteDto;
 import com.tandem6.housingfinance.creditguarantee.query.dto.MaxAndMinYearDto;
+import com.tandem6.housingfinance.creditguarantee.ui.dto.PredicateRequest;
+import com.tandem6.housingfinance.creditguarantee.ui.dto.PredicateResponse;
+import com.tandem6.housingfinance.institute.domain.Institute;
+import com.tandem6.housingfinance.institute.domain.InstituteRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -25,10 +29,12 @@ public class CreditGuaranteeRestController {
 
     final private CreditGuaranteeService creditGuaranteeService;
     final private AmountReportService amountReportService;
+    final private InstituteRepository instituteRepository;
 
-    public CreditGuaranteeRestController(CreditGuaranteeService creditGuaranteeService, AmountReportService amountReportService) {
+    public CreditGuaranteeRestController(CreditGuaranteeService creditGuaranteeService, AmountReportService amountReportService, InstituteRepository instituteRepository) {
         this.creditGuaranteeService = creditGuaranteeService;
         this.amountReportService = amountReportService;
+        this.instituteRepository = instituteRepository;
     }
 
     @GetMapping("/creditGuarantees")
@@ -71,19 +77,26 @@ public class CreditGuaranteeRestController {
         }
     }
 
-    @GetMapping("/creditGuarantee/{instituteName}/{month}/predicate")
-    public ResponseEntity<Integer> getPredicate(@PathVariable String instituteName, @PathVariable Integer month ){
+    @PostMapping("/creditGuarantee/predicate")
+    public ResponseEntity<PredicateResponse> getPredicate(@Valid @RequestBody PredicateRequest predicateRequest, BindingResult result){
 
-        if(validatePredicateParameter(instituteName, month)){
+        if( result.hasErrors() ){
             return ResponseEntity.badRequest().body(null);
         }
 
         try {
-            Integer creditGuaranteePredicate = creditGuaranteeService.getCreditGuaranteePredicate(instituteName, month);
-            return ResponseEntity.ok(creditGuaranteePredicate);
+            Integer creditGuaranteePredicate = creditGuaranteeService.getCreditGuaranteePredicate(predicateRequest.getInstituteName(), predicateRequest.getMonth());
+            Optional<Institute> institute = instituteRepository.findByInstituteName(predicateRequest.getInstituteName());
+
+            if( institute.isPresent() ) {
+                PredicateResponse predicateResponse = new PredicateResponse(institute.get().getInstituteCode(), predicateRequest.getMonth(), creditGuaranteePredicate);
+                return ResponseEntity.ok(predicateResponse);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(month);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 

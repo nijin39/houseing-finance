@@ -11,6 +11,8 @@ import java.util.List;
 @Component
 public class CreditGuaranteePredicateApache implements CreditGuaranteePredicate {
 
+    //달이 10월까지 밖에 없기 때문에 2를 더 더함.
+    public static final int correctLength = 2;
 
     @Override
     public Integer getPredicateAmount(Integer month, List<Long> data) {
@@ -23,11 +25,7 @@ public class CreditGuaranteePredicateApache implements CreditGuaranteePredicate 
             simpleRegression.addData(i, data.get(i));
         }
 
-        System.out.println("Start date unit at t = 0:");
-        System.out.println("Intercept: " + simpleRegression.getIntercept());
-        System.out.println("Slope    : " + simpleRegression.getSlope());
-
-        double predict = simpleRegression.predict(data.size() + month);
+        double predict = simpleRegression.predict(data.size()+ correctLength + month);
 
         return (int)predict;
     }

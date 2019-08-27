@@ -17,7 +17,7 @@ import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper=false)
 @Data
 @Entity
 public class CreditGuarantee extends TimeEntity {

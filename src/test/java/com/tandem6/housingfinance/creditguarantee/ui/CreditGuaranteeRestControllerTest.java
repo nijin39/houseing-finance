@@ -1,5 +1,6 @@
 package com.tandem6.housingfinance.creditguarantee.ui;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tandem6.housingfinance.account.application.JwtUserDetailsService;
 import com.tandem6.housingfinance.common.config.JwtAuthenticationEntryPoint;
 import com.tandem6.housingfinance.common.util.JwtTokenUtil;
@@ -10,16 +11,12 @@ import com.tandem6.housingfinance.creditguarantee.query.application.AmountReport
 import com.tandem6.housingfinance.creditguarantee.query.application.AmountReportService;
 import com.tandem6.housingfinance.creditguarantee.query.dao.AmountDaoException;
 import com.tandem6.housingfinance.creditguarantee.query.dto.*;
+import com.tandem6.housingfinance.creditguarantee.ui.dto.PredicateRequest;
 import com.tandem6.housingfinance.institute.application.InstituteService;
-import com.tandem6.housingfinance.institute.ui.InstituteRestController;
-import org.assertj.core.api.Assertions;
-import org.junit.Assert;
-import org.junit.Before;
+import com.tandem6.housingfinance.institute.domain.Institute;
+import com.tandem6.housingfinance.institute.domain.InstituteRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -30,14 +27,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -54,6 +49,7 @@ public class CreditGuaranteeRestControllerTest {
 
     @MockBean AmountReportService amountReportService;
     @MockBean CreditGuaranteeService creditGuaranteeService;
+    @MockBean InstituteRepository instituteRepository;
     @Autowired CreditGuaranteeRestController creditGuaranteeRestController;
 
     @Test
@@ -188,11 +184,13 @@ public class CreditGuaranteeRestControllerTest {
     @Test
     @WithMockUser(username="spring")
     public void T09_예측값에_대한_정상적인_값이_존재하지_않을_때() throws Exception {
-        when(creditGuaranteeService.getCreditGuaranteePredicate("abc", 3)).thenThrow(new Exception());
+        when(creditGuaranteeService.getCreditGuaranteePredicate("기업은행", 3)).thenThrow(new Exception());
+        PredicateRequest predicateRequest = new PredicateRequest("기업은행",3);
 
         ResultActions actions = mvc
-                .perform(get("/api/creditGuarantee/abc/3/predicate")
-                        .contentType(MediaType.APPLICATION_JSON))
+                .perform(post("/api/creditGuarantee/predicate")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(predicateRequest)))
                 .andDo(print());
 
         actions.andExpect(status().isInternalServerError());
@@ -202,10 +200,13 @@ public class CreditGuaranteeRestControllerTest {
     @WithMockUser(username="spring")
     public void T10_예측값에_대한_정상적인_값이_존재할_때() throws Exception {
         when(creditGuaranteeService.getCreditGuaranteePredicate(anyString(), anyInt())).thenReturn(Integer.valueOf(0));
+        when(instituteRepository.findByInstituteName("기업은행")).thenReturn(Optional.of(new Institute("기업은행", "bnk0001")));
+        PredicateRequest predicateRequest = new PredicateRequest("기업은행",3);
 
         ResultActions actions = mvc
-                .perform(get("/api/creditGuarantee/abc/3/predicate")
-                        .contentType(MediaType.APPLICATION_JSON))
+                .perform(post("/api/creditGuarantee/predicate")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(predicateRequest)))
                 .andDo(print());
 
         actions.andExpect(status().isOk());
@@ -213,7 +214,55 @@ public class CreditGuaranteeRestControllerTest {
 
     @Test
     @WithMockUser(username="spring")
-    public void T11_연간_리포트_비정상_출력() throws Exception {
+    public void T11_예측요청의_범위에_오류가_있을_때() throws Exception {
+        when(creditGuaranteeService.getCreditGuaranteePredicate(anyString(), anyInt())).thenReturn(Integer.valueOf(0));
+        when(instituteRepository.findByInstituteName("기업은행")).thenReturn(Optional.empty());
+        PredicateRequest predicateRequest = new PredicateRequest("기업은행",15);
+
+        ResultActions actions = mvc
+                .perform(post("/api/creditGuarantee/predicate")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(predicateRequest)))
+                .andDo(print());
+
+        actions.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser(username="spring")
+    public void T12_예측요청에_대한_금융기관_입력이_Null인_경우() throws Exception {
+        when(creditGuaranteeService.getCreditGuaranteePredicate(anyString(), anyInt())).thenReturn(Integer.valueOf(0));
+        when(instituteRepository.findByInstituteName("기업은행")).thenReturn(Optional.empty());
+        PredicateRequest predicateRequest = new PredicateRequest(null,3);
+
+        ResultActions actions = mvc
+                .perform(post("/api/creditGuarantee/predicate")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(predicateRequest)))
+                .andDo(print());
+
+        actions.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser(username="spring")
+    public void T13_예측요청에_대한_금융기관이_없을_때() throws Exception {
+        when(creditGuaranteeService.getCreditGuaranteePredicate(anyString(), anyInt())).thenReturn(Integer.valueOf(0));
+        when(instituteRepository.findByInstituteName("기업은행")).thenReturn(Optional.empty());
+        PredicateRequest predicateRequest = new PredicateRequest("기업은행",3);
+
+        ResultActions actions = mvc
+                .perform(post("/api/creditGuarantee/predicate")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(predicateRequest)))
+                .andDo(print());
+
+        actions.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser(username="spring")
+    public void T14_연간_리포트_비정상_출력() throws Exception {
         when(amountReportService.generateAmountAnnualReport()).thenThrow(new AmountDaoException("test", 1L));
 
         ResultActions actions = mvc
@@ -227,7 +276,7 @@ public class CreditGuaranteeRestControllerTest {
 
     @Test
     @WithMockUser(username="spring")
-    public void T12_연간_리포트_정상_출력() throws Exception {
+    public void T15_연간_리포트_정상_출력() throws Exception {
         when(amountReportService.generateAmountAnnualReport()).thenReturn(new AmountAnnualReport(Arrays.<AnnualReport>asList(new AnnualReport(Integer.valueOf(0), Integer.valueOf(0), new HashMap<String, Integer>() {{
             put("String", Integer.valueOf(0));
         }}))));
@@ -238,5 +287,13 @@ public class CreditGuaranteeRestControllerTest {
                 .andDo(print());
 
         actions.andExpect(status().isOk());
+    }
+
+    public static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
