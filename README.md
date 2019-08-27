@@ -249,7 +249,8 @@ JPA를 사용한다 하여도, 명령(Command), 조회(Query)에 대해서 효�
 - [X] CreditGuarantee CQRS 패턴 적용
 - [X] CreditGuarantee qlrm을 통한 조회모델 적용
 - [X] 예측모델 적용(Lianer Reggression)
-- [ ] Jwt 인증 적
+- [X] Jwt 인증 적용
+  - [ ] refresh 
 - [ ] 통합테스트 
 
 
