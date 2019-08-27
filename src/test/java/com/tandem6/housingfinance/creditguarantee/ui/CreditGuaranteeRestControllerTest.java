@@ -5,6 +5,7 @@ import com.tandem6.housingfinance.account.application.JwtUserDetailsService;
 import com.tandem6.housingfinance.common.config.JwtAuthenticationEntryPoint;
 import com.tandem6.housingfinance.common.util.JwtTokenUtil;
 import com.tandem6.housingfinance.creditguarantee.command.application.CreditGuaranteeService;
+import com.tandem6.housingfinance.creditguarantee.command.application.CreditGuaranteeServiceExcpetion;
 import com.tandem6.housingfinance.creditguarantee.command.domain.CreditGuarantee;
 import com.tandem6.housingfinance.creditguarantee.command.domain.CreditGuaranteeId;
 import com.tandem6.housingfinance.creditguarantee.query.application.AmountReportException;
@@ -12,6 +13,7 @@ import com.tandem6.housingfinance.creditguarantee.query.application.AmountReport
 import com.tandem6.housingfinance.creditguarantee.query.dao.AmountDaoException;
 import com.tandem6.housingfinance.creditguarantee.query.dto.*;
 import com.tandem6.housingfinance.creditguarantee.ui.dto.PredicateRequest;
+import com.tandem6.housingfinance.creditguaranteesummary.application.CreditGuaranteeSummaryExcpetion;
 import com.tandem6.housingfinance.institute.application.InstituteService;
 import com.tandem6.housingfinance.institute.domain.Institute;
 import com.tandem6.housingfinance.institute.domain.InstituteRepository;
@@ -184,7 +186,7 @@ public class CreditGuaranteeRestControllerTest {
     @Test
     @WithMockUser(username="spring")
     public void T09_예측값에_대한_정상적인_값이_존재하지_않을_때() throws Exception {
-        when(creditGuaranteeService.getCreditGuaranteePredicate("기업은행", 3)).thenThrow(new Exception());
+        when(creditGuaranteeService.getCreditGuaranteePredicate("기업은행", 3)).thenThrow(new CreditGuaranteeServiceExcpetion("TEST", 99L));
         PredicateRequest predicateRequest = new PredicateRequest("기업은행",3);
 
         ResultActions actions = mvc

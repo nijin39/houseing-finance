@@ -5,13 +5,13 @@ import lombok.Data;
 @Data
 public class PredicateResponse {
 
-    private String instituteCode;
+    private String bank;
     private int year;
     private int month;
     private int amount;
 
-    public PredicateResponse(String instituteCode, int month, int amount) {
-        this.instituteCode = instituteCode;
+    public PredicateResponse(String bank, int month, int amount) {
+        this.bank = bank;
         this.month = month;
         this.amount = amount;
         this.year = 2018;

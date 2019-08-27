@@ -13,7 +13,7 @@ import java.io.Serializable;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper=false)
 @Data
 @Entity
 public class Institute extends TimeEntity implements Serializable{

@@ -16,7 +16,7 @@ public class PredicateRequest implements Serializable {
     private static final long serialVersionUID = 8085096395374697124L;
 
     @NotBlank
-    private String instituteName;
+    private String bank;
 
     @Range(min = 1L, max = 12L)
     private int month;

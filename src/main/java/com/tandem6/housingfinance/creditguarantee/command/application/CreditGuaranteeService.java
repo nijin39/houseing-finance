@@ -45,14 +45,14 @@ public class CreditGuaranteeService {
         csvData.forEach(this::generate);
     }
 
-    public Integer getCreditGuaranteePredicate(String instituteName, Integer month) throws Exception {
+    public Integer getCreditGuaranteePredicate(String instituteName, Integer month) throws CreditGuaranteeServiceExcpetion {
         String instituteCode = null;
 
         Optional<Institute> instituteOptional = instituteRepository.findByInstituteName(instituteName);
         if( instituteOptional.isPresent()){
            instituteCode = instituteOptional.get().getInstituteCode();
         } else {
-            throw new Exception("없다. 코드");
+            throw new CreditGuaranteeServiceExcpetion("없다. 코드", 99L);
         }
 
         //TODO 변수명 변경

@@ -1,6 +1,7 @@
 package com.tandem6.housingfinance.creditguarantee.ui;
 
 import com.tandem6.housingfinance.creditguarantee.command.application.CreditGuaranteeService;
+import com.tandem6.housingfinance.creditguarantee.command.application.CreditGuaranteeServiceExcpetion;
 import com.tandem6.housingfinance.creditguarantee.command.domain.CreditGuarantee;
 import com.tandem6.housingfinance.creditguarantee.query.application.AmountReportException;
 import com.tandem6.housingfinance.creditguarantee.query.application.AmountReportService;
@@ -85,8 +86,8 @@ public class CreditGuaranteeRestController {
         }
 
         try {
-            Integer creditGuaranteePredicate = creditGuaranteeService.getCreditGuaranteePredicate(predicateRequest.getInstituteName(), predicateRequest.getMonth());
-            Optional<Institute> institute = instituteRepository.findByInstituteName(predicateRequest.getInstituteName());
+            Integer creditGuaranteePredicate = creditGuaranteeService.getCreditGuaranteePredicate(predicateRequest.getBank(), predicateRequest.getMonth());
+            Optional<Institute> institute = instituteRepository.findByInstituteName(predicateRequest.getBank());
 
             if( institute.isPresent() ) {
                 PredicateResponse predicateResponse = new PredicateResponse(institute.get().getInstituteCode(), predicateRequest.getMonth(), creditGuaranteePredicate);
@@ -94,7 +95,7 @@ public class CreditGuaranteeRestController {
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
-        } catch (Exception e) {
+        } catch (CreditGuaranteeServiceExcpetion e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
