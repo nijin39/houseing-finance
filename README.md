@@ -279,7 +279,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 Kim Jong IL - [@nijin39](https://twitter.com/nijin39) - nijin39@gmail.com
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+Project Link: [https://github.com/nijin39/houseing-finance](https://github.com/nijin39/houseing-finance)
 
 
 
