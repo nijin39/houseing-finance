@@ -117,9 +117,21 @@ curl -X POST \
 }'
 ```
 
+#### 3. Refresh Token
+```sh
+curl -X PUT \
+  http://localhost:8080/refreshToken \
+  -H 'authorization: Bearer Token eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaWppbjM5IiwiZXhwIjoxNTY2OTMyNzE0LCJpYXQiOjE1NjY5MTQ3MTR9.uFsurKI8VwbE02vz1vdQJNAN7b4_dnorG-5-8CX-C-kCXtFb7bHxWKInV7vtq6y4hNg2h8y6l8bQg44-RrRowA' \
+  -H 'content-type: application/json' \
+  -d '{
+	"username":"nijin39",
+	"password":"korea123"
+}'
+```
+
 ### API
 
-#### 1. Upload CSV
+#### 1. Upload CSV(테스트완료)
 ```sh
 curl -X POST \
   http://localhost:8080/upload \
@@ -129,26 +141,51 @@ curl -X POST \
   -F charset=UTF-8
 ```
 
-#### 2. Show all institute
+#### 2. Show all institute(테스트완료)
 ```sh
 curl -X GET \
   http://localhost:8080/api/institutes \
   -H 'authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaWppbjM5IiwiZXhwIjoxNTY2NjgxMjI4LCJpYXQiOjE1NjY2NjMyMjh9.A87NDjDHW6x_0AE6IcZMmTiczbIHnHHx-fmDsnhnCGyQYcSE67hPL4Lx4v7EWO6aDBv5w9AzbiErQVkzS_vfhg' \
 ```
 
-#### 3. Show Annual Report
+#### 3. Show Annual Report(테스트완료)
 ```sh
 curl -X GET \
   http://localhost:8080/api/creditGuarantee/annualReport \
   -H 'authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaWppbjM5IiwiZXhwIjoxNTY2NjgxMjI4LCJpYXQiOjE1NjY2NjMyMjh9.A87NDjDHW6x_0AE6IcZMmTiczbIHnHHx-fmDsnhnCGyQYcSE67hPL4Lx4v7EWO6aDBv5w9AzbiErQVkzS_vfhg' \
 ```
 
-#### 4. Max Amount Institute
+#### 4. Max Amount Institute(테스트완료)
 ```sh
 curl -X GET \
   http://localhost:8080/api/creditGuarantee/institute/max-amount \
   -H 'authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaWppbjM5IiwiZXhwIjoxNTY2NjgxMjI4LCJpYXQiOjE1NjY2NjMyMjh9.A87NDjDHW6x_0AE6IcZMmTiczbIHnHHx-fmDsnhnCGyQYcSE67hPL4Lx4v7EWO6aDBv5w9AzbiErQVkzS_vfhg' \
   ```
+
+#### 5. Average Credit Guarantee by institute(테스트 완료)
+```sh
+curl -X GET \
+  http://localhost:8080/api/creditGuarantee/institute/%EC%99%B8%ED%99%98%EC%9D%80%ED%96%89/max-min-average \
+  -H 'authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaWppbjM5IiwiZXhwIjoxNTY2OTM3NzQ4LCJpYXQiOjE1NjY5MTk3NDh9.4iKm9Vhdh7fNq_F2wEcu__IXNn42XemC0GilPb4b_H1o19vyv4EnNDCJgeAcSQ8MgUQqvFDLqDSjopq8gL4SZQ' \
+  -H 'content-type: application/json' \
+  -d '{
+	"username":"nijin39",
+	"password":"korea123"
+}'
+```
+
+#### 6. Credit Guarantee predicat(테스트 완료)
+
+```sh
+#### 6. curl -X GET \
+  http://localhost:8080/api/creditGuarantee/%EC%99%B8%ED%99%98%EC%9D%80%ED%96%89/3/predicate \
+  -H 'authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaWppbjM5IiwiZXhwIjoxNTY2OTM3NzQ4LCJpYXQiOjE1NjY5MTk3NDh9.4iKm9Vhdh7fNq_F2wEcu__IXNn42XemC0GilPb4b_H1o19vyv4EnNDCJgeAcSQ8MgUQqvFDLqDSjopq8gL4SZQ' \
+  -H 'content-type: application/json' \
+  -d '{
+	"username":"nijin39",
+	"password":"korea123"
+}'
+```
 
 
 <!-- Archetecure -->
@@ -250,8 +287,10 @@ JPA를 사용한다 하여도, 명령(Command), 조회(Query)에 대해서 효�
 - [X] CreditGuarantee qlrm을 통한 조회모델 적용
 - [X] 예측모델 적용(Lianer Reggression)
 - [X] Jwt 인증 적용
-  - [ ] refresh 
-- [ ] 통합테스트 
+  - [X] refresh 
+- [X] 통합테스트 
+- [ ] 예측모델 형변환
+- [ ] Readme 
 
 
 <!-- CONTRIBUTING -->
