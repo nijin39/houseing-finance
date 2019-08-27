@@ -117,6 +117,18 @@ curl -X POST \
 }'
 ```
 
+#### 3. Refresh Token
+```sh
+curl -X PUT \
+  http://localhost:8080/refreshToken \
+  -H 'authorization: Bearer Token eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaWppbjM5IiwiZXhwIjoxNTY2OTMyNzE0LCJpYXQiOjE1NjY5MTQ3MTR9.uFsurKI8VwbE02vz1vdQJNAN7b4_dnorG-5-8CX-C-kCXtFb7bHxWKInV7vtq6y4hNg2h8y6l8bQg44-RrRowA' \
+  -H 'content-type: application/json' \
+  -d '{
+	"username":"nijin39",
+	"password":"korea123"
+}'
+```
+
 ### API
 
 #### 1. Upload CSV
