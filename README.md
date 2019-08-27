@@ -131,6 +131,14 @@ curl -X PUT \
 
 ### API
 
+Swagger UI 경로
+
+```sh
+http://localhost:8080/swagger-ui.htm
+```
+
+소스의 /home/tandem6/DEV/housing-finance/src/main/resources/dataFile/sampleData.csv를 사용하시면 정상적인 결과들을 확인할 수 있습니다.
+
 #### 1. Upload CSV(테스트완료)
 ```sh
 curl -X POST \
