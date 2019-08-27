@@ -134,7 +134,7 @@ curl -X PUT \
 #### 1. Upload CSV(테스트완료)
 ```sh
 curl -X POST \
-  http://localhost:8080/upload \
+  http://localhost:8080/api/upload \
   -H 'authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaWppbjM5IiwiZXhwIjoxNTY2NjgxMjI4LCJpYXQiOjE1NjY2NjMyMjh9.A87NDjDHW6x_0AE6IcZMmTiczbIHnHHx-fmDsnhnCGyQYcSE67hPL4Lx4v7EWO6aDBv5w9AzbiErQVkzS_vfhg' \
   -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
   -F file=@aa.csv \
