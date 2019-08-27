@@ -85,7 +85,7 @@ cd client; yarn start
 ```
 4. Build & Packging
 ```sh
-./gradlew build buildClient
+./gradlew build clientBuild
 ```
 
 
