@@ -1,5 +1,6 @@
 package com.tandem6.housingfinance.creditguarantee.query.dao;
 
+import com.tandem6.housingfinance.creditguarantee.query.application.AmountReportException;
 import com.tandem6.housingfinance.creditguarantee.query.dto.*;
 import lombok.extern.slf4j.Slf4j;
 import org.qlrm.executor.JpaQueryExecutor;
@@ -74,25 +75,29 @@ public class AmountDao {
         return new MaxAmountInstitute(Integer.valueOf(creditGuaranteeSummary.getYear()), creditGuaranteeSummary.getInstituteName());
     }
 
-    public AmountAnnualReport generateAmountAnnualReport() {
-        AmountAnnualReport amountAnnualReport = new AmountAnnualReport();
+    public AmountAnnualReport generateAmountAnnualReport() throws AmountDaoException {
+        try {
+            AmountAnnualReport amountAnnualReport = new AmountAnnualReport();
 
-        MaxAndMinYearDto maxAndMinYearDto = this.getMaxAndMinYear().get(0);
-        JpaQueryExecutor queryExecutor = new JpaQueryExecutor();
+            MaxAndMinYearDto maxAndMinYearDto = this.getMaxAndMinYear().get(0);
+            JpaQueryExecutor queryExecutor = new JpaQueryExecutor();
 
-        IntStream.range(Integer.valueOf(maxAndMinYearDto.getMinYear()), Integer.valueOf(maxAndMinYearDto.getMaxYear())+1)
-                .forEach(year -> {
-                    List<CreditGuaranteeSummary> creditGuaranteeSummaryList = queryExecutor.executeSelect(entityManager, CreditGuaranteeSummary.class, "query/sample.sql", String.valueOf(year));
+            IntStream.range(Integer.valueOf(maxAndMinYearDto.getMinYear()), Integer.valueOf(maxAndMinYearDto.getMaxYear()) + 1)
+                    .forEach(year -> {
+                        List<CreditGuaranteeSummary> creditGuaranteeSummaryList = queryExecutor.executeSelect(entityManager, CreditGuaranteeSummary.class, "query/sample.sql", String.valueOf(year));
 
-                    amountAnnualReport.addAnnualReport(
-                            AnnualReport.builder()
-                                    .year(year)
-                                    .total_amount(getTotalAmountByYear(creditGuaranteeSummaryList))
-                                    .detail_amount(getInstituteAmountByYear(creditGuaranteeSummaryList))
-                                    .build()
-                    );
-                });
-        return amountAnnualReport;
+                        amountAnnualReport.addAnnualReport(
+                                AnnualReport.builder()
+                                        .year(year)
+                                        .total_amount(getTotalAmountByYear(creditGuaranteeSummaryList))
+                                        .detail_amount(getInstituteAmountByYear(creditGuaranteeSummaryList))
+                                        .build()
+                        );
+                    });
+            return amountAnnualReport;
+        } catch (Exception e){
+            throw new AmountDaoException(e, 1L);
+        }
     }
 
     private Map<String, Integer> getInstituteAmountByYear(List<CreditGuaranteeSummary> list) {

@@ -6,7 +6,9 @@ import com.tandem6.housingfinance.common.util.JwtTokenUtil;
 import com.tandem6.housingfinance.creditguarantee.command.application.CreditGuaranteeService;
 import com.tandem6.housingfinance.creditguarantee.command.domain.CreditGuarantee;
 import com.tandem6.housingfinance.creditguarantee.command.domain.CreditGuaranteeId;
+import com.tandem6.housingfinance.creditguarantee.query.application.AmountReportException;
 import com.tandem6.housingfinance.creditguarantee.query.application.AmountReportService;
+import com.tandem6.housingfinance.creditguarantee.query.dao.AmountDaoException;
 import com.tandem6.housingfinance.creditguarantee.query.dto.*;
 import com.tandem6.housingfinance.institute.application.InstituteService;
 import com.tandem6.housingfinance.institute.ui.InstituteRestController;
@@ -134,7 +136,14 @@ public class CreditGuaranteeRestControllerTest {
     @Test
     @WithMockUser(username="spring")
     public void T05_금융기관에_대한_max_amount가_미_존재할_때() throws Exception {
+        when(amountReportService.getMaxAmountInstitute()).thenThrow(new AmountReportException("TEST", 1L));
 
+        ResultActions actions = mvc
+                .perform(get("/api/creditGuarantee/institute/max-amount")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print());
+
+        actions.andExpect(status().isNoContent());
     }
 
     @Test
@@ -151,30 +160,83 @@ public class CreditGuaranteeRestControllerTest {
     }
 
     @Test
-    public void testGetMaxAndMinAverage() throws Exception {
-        when(amountReportService.getMaxAndMinAverage(anyString())).thenReturn(new MaxAndMinAverageByInstituteDto("instituteName", Arrays.<AmountByYear>asList(new AmountByYear(Integer.valueOf(0), Integer.valueOf(0)))));
+    @WithMockUser(username="spring")
+    public void T07_금융기관에_대한_Max_Min_평균값_미존재() throws Exception {
+        when(amountReportService.getMaxAndMinAverage(anyString())).thenThrow(new AmountReportException("test",2L));
 
-        MaxAndMinAverageByInstituteDto result = creditGuaranteeRestController.getMaxAndMinAverage("instituteName");
-        Assert.assertEquals(new MaxAndMinAverageByInstituteDto("instituteName", Arrays.<AmountByYear>asList(new AmountByYear(Integer.valueOf(0), Integer.valueOf(0)))), result);
+        ResultActions actions = mvc
+                .perform(get("/api/creditGuarantee/institute/abc/max-min-average")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print());
+
+        actions.andExpect(status().isNoContent());
     }
 
     @Test
-    public void testGetPredicate() throws Exception {
+    @WithMockUser(username="spring")
+    public void T08_금융기관에_대한_Max_Min_평균값_존재() throws Exception {
+        when(amountReportService.getMaxAndMinAverage(anyString())).thenReturn(new MaxAndMinAverageByInstituteDto("abc", Arrays.<AmountByYear>asList(new AmountByYear(Integer.valueOf(0), Integer.valueOf(0)))));
+
+        ResultActions actions = mvc
+                .perform(get("/api/creditGuarantee/institute/abc/max-min-average")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print());
+
+        actions.andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username="spring")
+    public void T09_예측값에_대한_정상적인_값이_존재하지_않을_때() throws Exception {
+        when(creditGuaranteeService.getCreditGuaranteePredicate("abc", 3)).thenThrow(new Exception());
+
+        ResultActions actions = mvc
+                .perform(get("/api/creditGuarantee/abc/3/predicate")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print());
+
+        actions.andExpect(status().isInternalServerError());
+    }
+
+    @Test
+    @WithMockUser(username="spring")
+    public void T10_예측값에_대한_정상적인_값이_존재할_때() throws Exception {
         when(creditGuaranteeService.getCreditGuaranteePredicate(anyString(), anyInt())).thenReturn(Integer.valueOf(0));
 
-        Integer result = creditGuaranteeRestController.getPredicate("instituteName", Integer.valueOf(0));
-        Assert.assertEquals(Integer.valueOf(0), result);
+        ResultActions actions = mvc
+                .perform(get("/api/creditGuarantee/abc/3/predicate")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print());
+
+        actions.andExpect(status().isOk());
     }
 
     @Test
-    public void testGetAnnualReport() throws Exception {
+    @WithMockUser(username="spring")
+    public void T11_연간_리포트_비정상_출력() throws Exception {
+        when(amountReportService.generateAmountAnnualReport()).thenThrow(new AmountDaoException("test", 1L));
+
+        ResultActions actions = mvc
+                .perform(get("/api/creditGuarantee/annualReport")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print());
+
+        actions.andExpect(status().isInternalServerError());
+    }
+
+
+    @Test
+    @WithMockUser(username="spring")
+    public void T12_연간_리포트_정상_출력() throws Exception {
         when(amountReportService.generateAmountAnnualReport()).thenReturn(new AmountAnnualReport(Arrays.<AnnualReport>asList(new AnnualReport(Integer.valueOf(0), Integer.valueOf(0), new HashMap<String, Integer>() {{
             put("String", Integer.valueOf(0));
         }}))));
 
-        AmountAnnualReport result = creditGuaranteeRestController.getAnnualReport();
-        Assert.assertEquals(new AmountAnnualReport(Arrays.<AnnualReport>asList(new AnnualReport(Integer.valueOf(0), Integer.valueOf(0), new HashMap<String, Integer>() {{
-            put("String", Integer.valueOf(0));
-        }}))), result);
+        ResultActions actions = mvc
+                .perform(get("/api/creditGuarantee/annualReport")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print());
+
+        actions.andExpect(status().isOk());
     }
 }

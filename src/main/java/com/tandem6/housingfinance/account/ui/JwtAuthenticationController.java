@@ -17,7 +17,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-@Slf4j
 @RestController
 @CrossOrigin
 public class JwtAuthenticationController {
@@ -57,7 +56,6 @@ public class JwtAuthenticationController {
                 .loadUserByUsername(authenticationRequest.getUsername());
 
         if( token.startsWith("Bearer Token ") ){
-            log.info(":::::::::: {}", token.substring(13));
             if( jwtTokenUtil.validateToken(token.substring(13), userDetails) )
             {
                 final String newToken = jwtTokenUtil.generateToken(userDetails);

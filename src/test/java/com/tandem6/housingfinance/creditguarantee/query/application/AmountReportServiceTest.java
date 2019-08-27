@@ -27,7 +27,7 @@ public class AmountReportServiceTest {
     }
 
     @Test
-    public void testGenerateAmountAnnualReport() throws Exception {
+    public void T01_연간리포트_작성() throws Exception {
         when(amountDao.generateAmountAnnualReport()).thenReturn(new AmountAnnualReport(Arrays.<AnnualReport>asList(new AnnualReport(Integer.valueOf(0), Integer.valueOf(0), new HashMap<String, Integer>() {{
             put("String", Integer.valueOf(0));
         }}))));
@@ -39,7 +39,7 @@ public class AmountReportServiceTest {
     }
 
     @Test
-    public void testGetMaxAmountInstitute() throws Exception {
+    public void T02_금융기관_지원_최대액수() throws Exception {
         when(amountDao.getMaxAmountInstitute()).thenReturn(new MaxAmountInstitute(Integer.valueOf(0), "bank"));
 
         MaxAmountInstitute result = amountReportService.getMaxAmountInstitute();
@@ -47,7 +47,7 @@ public class AmountReportServiceTest {
     }
 
     @Test
-    public void testGetMaxAndMinAverage() throws Exception {
+    public void T03_금융기관_Max_Min() throws Exception {
         when(amountDao.getMaxAndMinAverage(anyString())).thenReturn(new MaxAndMinAverageByInstituteDto("instituteName", Arrays.<AmountByYear>asList(new AmountByYear(Integer.valueOf(0), Integer.valueOf(0)))));
 
         MaxAndMinAverageByInstituteDto result = amountReportService.getMaxAndMinAverage("instituteName");
@@ -55,7 +55,7 @@ public class AmountReportServiceTest {
     }
 
     @Test
-    public void testGetMaxAndMinYear() throws Exception {
+    public void T04_최소_최대_연도찾기() throws Exception {
         when(amountDao.getMaxAndMinYear()).thenReturn(Arrays.<MaxAndMinYearDto>asList(new MaxAndMinYearDto("maxYear", "minYear")));
 
         List<MaxAndMinYearDto> result = amountReportService.getMaxAndMinYear();
@@ -63,4 +63,3 @@ public class AmountReportServiceTest {
     }
 }
 
-//Generated with love by TestMe :) Please report issues and submit feature requests at: http://weirddev.com/forum#!/testme

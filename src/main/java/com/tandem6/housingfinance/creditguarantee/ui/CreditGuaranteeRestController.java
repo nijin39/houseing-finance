@@ -2,7 +2,9 @@ package com.tandem6.housingfinance.creditguarantee.ui;
 
 import com.tandem6.housingfinance.creditguarantee.command.application.CreditGuaranteeService;
 import com.tandem6.housingfinance.creditguarantee.command.domain.CreditGuarantee;
+import com.tandem6.housingfinance.creditguarantee.query.application.AmountReportException;
 import com.tandem6.housingfinance.creditguarantee.query.application.AmountReportService;
+import com.tandem6.housingfinance.creditguarantee.query.dao.AmountDaoException;
 import com.tandem6.housingfinance.creditguarantee.query.dto.AmountAnnualReport;
 import com.tandem6.housingfinance.creditguarantee.query.dto.MaxAmountInstitute;
 import com.tandem6.housingfinance.creditguarantee.query.dto.MaxAndMinAverageByInstituteDto;
@@ -45,28 +47,59 @@ public class CreditGuaranteeRestController {
 
     @GetMapping("/creditGuarantee/institute/max-amount")
     public ResponseEntity<MaxAmountInstitute> getMaxAmountInstitute(){
-        MaxAmountInstitute maxAmountInstitute = amountReportService.getMaxAmountInstitute();
-        return ResponseEntity.ok(maxAmountInstitute);
-    }
-
-    @GetMapping("/creditGuarantee/institute/{instituteName}/max-min-average")
-    public MaxAndMinAverageByInstituteDto getMaxAndMinAverage(@PathVariable String instituteName){
-        return amountReportService.getMaxAndMinAverage(instituteName);
-    }
-
-    @GetMapping("/creditGuarantee/{instituteName}/{month}/predicate")
-    public Integer getPredicate(@PathVariable String instituteName, @PathVariable Integer month ){
+        MaxAmountInstitute maxAmountInstitute = null;
         try {
-            return creditGuaranteeService.getCreditGuaranteePredicate(instituteName, month);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return 0;
+            maxAmountInstitute = amountReportService.getMaxAmountInstitute();
+            return ResponseEntity.ok(maxAmountInstitute);
+        } catch (AmountReportException e) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         }
     }
 
+    @GetMapping("/creditGuarantee/institute/{instituteName}/max-min-average")
+    public ResponseEntity<MaxAndMinAverageByInstituteDto> getMaxAndMinAverage(@PathVariable String instituteName){
+
+        if( instituteName == null ) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+        try {
+            MaxAndMinAverageByInstituteDto maxAndMinAverage = amountReportService.getMaxAndMinAverage(instituteName);
+            return ResponseEntity.ok(maxAndMinAverage);
+        } catch (AmountReportException e){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        }
+    }
+
+    @GetMapping("/creditGuarantee/{instituteName}/{month}/predicate")
+    public ResponseEntity<Integer> getPredicate(@PathVariable String instituteName, @PathVariable Integer month ){
+
+        if(validatePredicateParameter(instituteName, month)){
+            return ResponseEntity.badRequest().body(null);
+        }
+
+        try {
+            Integer creditGuaranteePredicate = creditGuaranteeService.getCreditGuaranteePredicate(instituteName, month);
+            return ResponseEntity.ok(creditGuaranteePredicate);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(month);
+        }
+    }
+
+    private boolean validatePredicateParameter(@PathVariable String instituteName, @PathVariable Integer month) {
+        return instituteName == null || instituteName.isEmpty() || month == 0 || month >= 13;
+    }
+
     @GetMapping("/creditGuarantee/annualReport")
-    public AmountAnnualReport getAnnualReport(){
-        return amountReportService.generateAmountAnnualReport();
+    public ResponseEntity<AmountAnnualReport> getAnnualReport(){
+        try {
+            AmountAnnualReport amountAnnualReport = amountReportService.generateAmountAnnualReport();
+            return ResponseEntity.ok(amountAnnualReport);
+        } catch (AmountDaoException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     private <T> ResponseEntity<List<T>> getListResponseEntity(List<T> maxAndMinYear) {
