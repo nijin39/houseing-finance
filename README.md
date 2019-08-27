@@ -289,6 +289,8 @@ JPA를 사용한다 하여도, 명령(Command), 조회(Query)에 대해서 효�
 - [X] Jwt 인증 적용
   - [X] refresh 
 - [X] 통합테스트 
+- [ ] 예측모델 형변환
+- [ ] Readme 
 
 
 <!-- CONTRIBUTING -->
