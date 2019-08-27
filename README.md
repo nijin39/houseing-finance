@@ -177,13 +177,13 @@ curl -X GET \
 #### 6. Credit Guarantee predicat(테스트 완료)
 
 ```sh
-#### 6. curl -X GET \
-  http://localhost:8080/api/creditGuarantee/%EC%99%B8%ED%99%98%EC%9D%80%ED%96%89/3/predicate \
-  -H 'authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaWppbjM5IiwiZXhwIjoxNTY2OTM3NzQ4LCJpYXQiOjE1NjY5MTk3NDh9.4iKm9Vhdh7fNq_F2wEcu__IXNn42XemC0GilPb4b_H1o19vyv4EnNDCJgeAcSQ8MgUQqvFDLqDSjopq8gL4SZQ' \
+curl -X POST \
+  http://localhost:8080/api/creditGuarantee/predicate \
+  -H 'authorization: Bearer  eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaWppbjM5IiwiZXhwIjoxNTY2OTYyMDczLCJpYXQiOjE1NjY5NDQwNzN9.Ab9HY1eY3RDbnxVSXRAwX9L4od6Cq5R_SltHasdPpMHqP9pMpIT59EAf3s6-Adj9uxS5hmuv4rk_CIO06e_n-w' \
   -H 'content-type: application/json' \
   -d '{
-	"username":"nijin39",
-	"password":"korea123"
+	"bank":"국민은행",
+	"month" : 3
 }'
 ```
 
