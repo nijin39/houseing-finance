@@ -33,6 +33,7 @@
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
 * [Usage](#usage)
+* [Architecture](#architecture)
 * [Roadmap](#roadmap)
 * [Contributing](#contributing)
 * [License](#license)
@@ -63,7 +64,6 @@
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
 * yarn 
 ```sh
 yarn install
@@ -85,7 +85,7 @@ cd client; yarn start
 ```
 4. Build & Packging
 ```sh
-./gradlew build buildClient
+./gradlew build clientBuild
 ```
 
 
@@ -134,8 +134,8 @@ curl -X PUT \
 #### 1. Upload CSV(테스트완료)
 ```sh
 curl -X POST \
-  http://localhost:8080/upload \
-  -H 'authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaWppbjM5IiwiZXhwIjoxNTY2NjgxMjI4LCJpYXQiOjE1NjY2NjMyMjh9.A87NDjDHW6x_0AE6IcZMmTiczbIHnHHx-fmDsnhnCGyQYcSE67hPL4Lx4v7EWO6aDBv5w9AzbiErQVkzS_vfhg' \
+  http://localhost:8080/api/upload \
+  -H 'authorization: Bearer  eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaWppbjM5IiwiZXhwIjoxNTY2OTYxNTE2LCJpYXQiOjE1NjY5NDM1MTZ9.I0QEqKZ8lD1iZMw-NkmneW1E14aIgvuIakdnEsyejvl-lRiHGy5VgNqifO1D32_UJ944qx_SBIEN_w9IPdYKpA' \
   -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
   -F file=@aa.csv \
   -F charset=UTF-8
@@ -177,13 +177,13 @@ curl -X GET \
 #### 6. Credit Guarantee predicat(테스트 완료)
 
 ```sh
-#### 6. curl -X GET \
-  http://localhost:8080/api/creditGuarantee/%EC%99%B8%ED%99%98%EC%9D%80%ED%96%89/3/predicate \
-  -H 'authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaWppbjM5IiwiZXhwIjoxNTY2OTM3NzQ4LCJpYXQiOjE1NjY5MTk3NDh9.4iKm9Vhdh7fNq_F2wEcu__IXNn42XemC0GilPb4b_H1o19vyv4EnNDCJgeAcSQ8MgUQqvFDLqDSjopq8gL4SZQ' \
+curl -X POST \
+  http://localhost:8080/api/creditGuarantee/predicate \
+  -H 'authorization: Bearer  eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaWppbjM5IiwiZXhwIjoxNTY2OTYyMDczLCJpYXQiOjE1NjY5NDQwNzN9.Ab9HY1eY3RDbnxVSXRAwX9L4od6Cq5R_SltHasdPpMHqP9pMpIT59EAf3s6-Adj9uxS5hmuv4rk_CIO06e_n-w' \
   -H 'content-type: application/json' \
   -d '{
-	"username":"nijin39",
-	"password":"korea123"
+	"bank":"국민은행",
+	"month" : 3
 }'
 ```
 
@@ -289,8 +289,8 @@ JPA를 사용한다 하여도, 명령(Command), 조회(Query)에 대해서 효�
 - [X] Jwt 인증 적용
   - [X] refresh 
 - [X] 통합테스트 
-- [ ] 예측모델 형변환
-- [ ] Readme 
+- [X] 예측모델 형변환
+- [X] Readme 
 
 
 <!-- CONTRIBUTING -->
