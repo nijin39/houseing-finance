@@ -296,6 +296,9 @@ Project Link: [https://github.com/nijin39/houseing-finance](https://github.com/n
 * [Sticky Kit](http://leafo.net/sticky-kit)
 * [JVectorMap](http://jvectormap.com)
 * [Font Awesome](https://fontawesome.com)
+* [ddd-cqrs](https://nesoy.github.io/articles/2018-07/DDD-CQRS)
+* [Json Web Token](https://velopert.com/2389)
+* [Linear Regression](http://woowabros.github.io/study/2018/08/01/linear_regression_qr.html)
 
 
 
@@ -316,3 +319,4 @@ Project Link: [https://github.com/nijin39/houseing-finance](https://github.com/n
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/othneildrew
 [product-screenshot]: images/screenshot.png
+
