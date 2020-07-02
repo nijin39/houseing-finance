@@ -79,7 +79,7 @@ public class CreditGuaranteeService {
                         CreditGuarantee creditGuarantee = new CreditGuarantee(creditGuaranteeId, Long.valueOf(amount.replaceAll("[^\\d.]", "")));
                         creditGuaranteeRepository.save(creditGuarantee);
                     } catch(NumberFormatException nfe) {
-                        log.warn("AMOUNT에 올바른 데이터가 입력되지 않았습니다.s");
+                        log.warn("It was not inputed amount.");
                     }
 
                 });
