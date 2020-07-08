@@ -34,6 +34,14 @@ public class Sorting {
 
     }
 
+    public int foo(int a) {
+        int b = 12;
+        if (a == 1) {
+            return b;
+        }
+        return b;  // Noncompliant
+    }
+
     //회전시마다 배열상태를 보기위한 메서드
     private static void ShowArray(int[] data) {
         for (int i = 0; i < data.length; i++) {
