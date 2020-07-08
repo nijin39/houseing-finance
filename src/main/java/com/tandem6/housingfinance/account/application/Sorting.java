@@ -32,6 +32,31 @@ public class Sorting {
             System.out.print(data[i] + "  "); // 1, 5, 6, 7, 9 출력되도록
         }
 
+        int myVariable = 0;
+
+        switch (myVariable) {
+            case 1:
+                foo();
+                break;
+            case 2:  // Both 'doSomething()' and 'doSomethingElse()' will be executed. Is it on purpose ?
+                doSomething();
+            default:
+                doSomethingElse();
+                break;
+        }
+
+    }
+
+    public int foo() {
+        return 0;
+    }
+
+    public int doSomething() {
+        return 0;
+    }
+
+    public int doSomethingElse() {
+        return 0;
     }
 
     public int foo(int a) {
