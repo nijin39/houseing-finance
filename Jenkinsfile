@@ -9,7 +9,7 @@ pipeline {
     
     stage('Sonarqube') {
       environment {
-        scannerHome = tool 'SonarQube Scanner for Jenkins'
+        def scannerHome = tool name: 'sonar_scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation';
       }    
       steps {
         withSonarQubeEnv('sonarqube') {
