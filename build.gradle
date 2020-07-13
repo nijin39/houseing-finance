@@ -26,6 +26,7 @@ plugins {
     id 'org.asciidoctor.convert' version '1.5.3'
 //    id 'org.springframework.boot' version '2.1.7.RELEASE'
     id 'java'
+    id "org.sonarqube" version "2.7"
 }
 
 apply plugin: 'java'
@@ -34,10 +35,18 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'com.moowork.node'
 apply plugin: 'application'
 
+
 mainClassName = 'com.tandem6.housingfinance.HousingFinanceApplication'
 group = 'com.tandem6'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
+
+sonarqube {
+    properties {
+        property 'sonar.projectName', 'Example for tandem6'
+    }
+}
+
 
 configurations {
     developmentOnly
